@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "LEDs/main_app_led.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -628,10 +629,15 @@ void LCD_TASK_RUN(void const * argument)
   for(;;)
   {
     HAL_IWDG_Refresh(&hiwdg);
+    LED_LCD(true);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
     osDelay(500);
+    LED_LCD(false);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
     osDelay(500);
+    LED_UART1(true);
+    osDelay(100);
+    LED_UART1(false);
   }
   /* USER CODE END LCD_TASK_RUN */
 }
@@ -649,7 +655,13 @@ void BUTTON_TASK_RUN(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    LED_Button(true);
+    osDelay(100);
+    LED_Button(false);
+    osDelay(1000);
+    LED_UART3(true);
+    osDelay(100);
+    LED_UART3(false);
   }
   /* USER CODE END BUTTON_TASK_RUN */
 }
@@ -667,7 +679,10 @@ void EEPROM_TASK_RUN(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    LED_EEPROM(true);
+    osDelay(300);
+    LED_EEPROM(false);
+    osDelay(2000);
   }
   /* USER CODE END EEPROM_TASK_RUN */
 }
@@ -685,7 +700,10 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    LED_Encoder(true);
+    osDelay(1000);
+    LED_Encoder(false);
+    osDelay(1000);    
   }
   /* USER CODE END ROTARY_ENCODER_TASK_RUN */
 }
@@ -703,7 +721,12 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    LED_Step_Motor_0(false);
+    LED_Step_Motor_1(true);
+    osDelay(1000);
+    LED_Step_Motor_0(true);
+    LED_Step_Motor_1(false);
+    osDelay(1000);
   }
   /* USER CODE END STEPPER_MOTOR_TASK_RUN */
 }

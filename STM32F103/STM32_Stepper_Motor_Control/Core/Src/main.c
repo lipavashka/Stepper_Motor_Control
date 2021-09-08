@@ -608,6 +608,8 @@ void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
+  // HAL_UART_Transmit(&huart1, "RUN_DEFAULT_TASK\r\n", sizeof("RUN_DEFAULT_TASK\r\n"), 1000);
+  // osDelay(1000);
   for(;;)
   {
     osDelay(1);
@@ -638,6 +640,7 @@ void LCD_TASK_RUN(void const * argument)
     LED_UART1(true);
     osDelay(100);
     LED_UART1(false);
+    HAL_UART_Transmit(&huart1, "RUN_LCD_TASK\r\n", sizeof("RUN_LCD_TASK\r\n"), 10);
   }
   /* USER CODE END LCD_TASK_RUN */
 }
@@ -662,6 +665,7 @@ void BUTTON_TASK_RUN(void const * argument)
     LED_UART3(true);
     osDelay(100);
     LED_UART3(false);
+    HAL_UART_Transmit(&huart1, "RUN_BUTTON_TASK\r\n", sizeof("RUN_BUTTON_TASK\r\n"), 10);
   }
   /* USER CODE END BUTTON_TASK_RUN */
 }
@@ -683,6 +687,7 @@ void EEPROM_TASK_RUN(void const * argument)
     osDelay(300);
     LED_EEPROM(false);
     osDelay(2000);
+    HAL_UART_Transmit(&huart1, "RUN_EEPROM_TASK\r\n", sizeof("RUN_EEPROM_TASK\r\n"), 10);
   }
   /* USER CODE END EEPROM_TASK_RUN */
 }
@@ -703,7 +708,9 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     LED_Encoder(true);
     osDelay(1000);
     LED_Encoder(false);
-    osDelay(1000);    
+    osDelay(1000);
+    HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
+    HAL_UART_Transmit(&huart1, "RUN_ENCODER_TASK\r\n", sizeof("RUN_ENCODER_TASK\r\n"), 10);
   }
   /* USER CODE END ROTARY_ENCODER_TASK_RUN */
 }
@@ -727,6 +734,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     LED_Step_Motor_0(true);
     LED_Step_Motor_1(false);
     osDelay(1000);
+    HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK\r\n", sizeof("RUN_STEPPER_MOTOR_TASK\r\n"), 10);
   }
   /* USER CODE END STEPPER_MOTOR_TASK_RUN */
 }
@@ -739,6 +747,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  HAL_UART_Transmit(&huart1, "Error Handler\r\n", sizeof("Error Handler\r\n"), 1000);
   __disable_irq();
   while (1)
   {

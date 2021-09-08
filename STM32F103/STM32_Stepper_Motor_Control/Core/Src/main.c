@@ -21,6 +21,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "LEDs/main_app_led.h"
+#include "LCD_PCF8574/i2c-lcd.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -126,7 +127,11 @@ int main(void)
   MX_USART3_UART_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-
+  lcd_init ();
+  lcd_send_string ("Potato planting");
+  HAL_Delay(1000);
+  lcd_put_cur(1, 0);
+  lcd_send_string("machine");
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */

@@ -1162,6 +1162,15 @@
     <group>
         <name>MAIN_APP</name>
         <group>
+            <name>LCD_PCF8574</name>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\LCD_PCF8574\i2c-lcd.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\LCD_PCF8574\i2c-lcd.h</name>
+            </file>
+        </group>
+        <group>
             <name>LED</name>
             <file>
                 <name>$PROJ_DIR$\..\MAIN_APP\LEDs\main_app_led.c</name>

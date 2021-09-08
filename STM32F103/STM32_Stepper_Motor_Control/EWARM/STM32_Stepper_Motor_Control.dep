@@ -186,6 +186,7 @@
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\main_app_led.o</file>
             <file>$PROJ_DIR$\..\MAIN_APP\LEDs\main_app_led.h</file>
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\main_app_led.xcl</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\i2c-lcd.xcl</file>
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\i2c-lcd.o</file>
             <file>$PROJ_DIR$\..\MAIN_APP\LCD_PCF8574\i2c-lcd.c</file>
@@ -605,7 +606,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 37 4 36 18 49 40 42 125 160 47 44 48 52 43 132 131 136 175 138 137 39 168 130 128 123 141 145 142 133 167 126 165 134 116 129 164 122 155 144 29 51 45 147 151 152 154 148 156 174 170 157 35 34 38 46 179 177 184</file>
+                    <file> 37 4 36 18 49 40 42 125 160 47 44 48 52 43 132 131 136 175 138 137 39 168 130 128 123 141 145 142 133 167 126 165 134 116 129 164 122 155 144 29 51 45 147 151 152 154 148 156 174 170 157 35 34 38 46 179 177 185 181</file>
                 </tool>
             </inputs>
         </file>
@@ -876,7 +877,7 @@
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 146 9 127 11 172 14 182 3 173 178 28 25 15 27 119 26 22 20 21 12 31 10 16 23 17 1 30 2 5 24 32 13 8 6 162 7 19 150 153 161 163 149</file>
+                    <file> 146 9 127 11 172 14 183 3 173 178 28 25 15 27 119 26 22 20 21 12 31 10 16 23 17 1 30 2 5 24 32 13 8 6 162 7 19 150 153 161 163 149</file>
                 </tool>
             </inputs>
         </file>
@@ -894,17 +895,17 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 182</file>
+                    <file> 183</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 181</file>
+                    <file> 182</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 184 4 36 18 49 40 42 125 160 47 44 48 52 43 132 131 136 175 138 137 39 168 130 128 123 141 145 142 133 167 126 165 134 116 129 164 122 155 144</file>
+                    <file> 185 4 36 18 49 40 42 125 160 47 44 48 52 43 132 131 136 175 138 137 39 168 130 128 123 141 145 142 133 167 126 165 134 116 129 164 122 155 144</file>
                 </tool>
             </inputs>
         </file>

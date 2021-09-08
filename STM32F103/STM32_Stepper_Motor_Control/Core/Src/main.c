@@ -22,6 +22,7 @@
 #include "cmsis_os.h"
 #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
+#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -132,6 +133,9 @@ int main(void)
   HAL_Delay(1000);
   lcd_put_cur(1, 0);
   lcd_send_string("machine");
+  HAL_Delay(2000);
+  lcd_clear ();
+  lcd_put_cur(0, 0);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -632,6 +636,7 @@ void StartDefaultTask(void const * argument)
 void LCD_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN LCD_TASK_RUN */
+  lcd_send_string ("RUN_LCD_TASK...");
   /* Infinite loop */
   for(;;)
   {
@@ -707,6 +712,9 @@ void EEPROM_TASK_RUN(void const * argument)
 void ROTARY_ENCODER_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN ROTARY_ENCODER_TASK_RUN */
+  /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
+  uint8_t MSG[50] = {'\0'};
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   /* Infinite loop */
   for(;;)
   {
@@ -714,6 +722,8 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     osDelay(1000);
     LED_Encoder(false);
     osDelay(1000);
+    sprintf((void*)MSG, "Encoder Switch Released, Encoder Ticks = %d\n\r", ((htim2.Instance->CNT)>>2));
+    HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
     HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
     HAL_UART_Transmit(&huart1, "RUN_ENCODER_TASK\r\n", sizeof("RUN_ENCODER_TASK\r\n"), 10);
   }

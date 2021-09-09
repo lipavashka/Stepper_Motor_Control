@@ -159,3 +159,7 @@ STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/i2c-
 STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/i2c-lcd.pbi
 STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/i2c-lcd.pbi.dep
 STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/i2c-lcd.xcl
+STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/main_app_stepper_motor.o
+STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/main_app_stepper_motor.pbi
+STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/main_app_stepper_motor.pbi.dep
+STM32F103/STM32_Stepper_Motor_Control/EWARM/STM32_Stepper_Motor_Control/Obj/main_app_stepper_motor.xcl

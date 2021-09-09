@@ -1298,6 +1298,15 @@
                 <name>$PROJ_DIR$\..\MAIN_APP\LEDs\main_app_led.h</name>
             </file>
         </group>
+        <group>
+            <name>STEPPER_MOTOR</name>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\main_app_stepper_motor.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\main_app_stepper_motor.h</name>
+            </file>
+        </group>
     </group>
     <group>
         <name>Middlewares</name>

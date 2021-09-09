@@ -20,13 +20,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "LEDs/main_app_led.h"
-#include "LCD_PCF8574/i2c-lcd.h"
-#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "LEDs/main_app_led.h"
+#include "LCD_PCF8574/i2c-lcd.h"
+#include "STEPPER_MOTOR/main_app_stepper_motor.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -434,9 +434,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 64-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 1000-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -740,6 +740,13 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 void STEPPER_MOTOR_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
+  uint16_t pwm_value_0 = 10;
+  uint16_t pwm_value_1 = 10;
+  Enable_Motor_0();
+  setPWM_0(pwm_value_0);
+  setPWM_1(pwm_value_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   /* Infinite loop */
   for(;;)
   {
@@ -749,6 +756,22 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     LED_Step_Motor_0(true);
     LED_Step_Motor_1(false);
     osDelay(1000);
+    
+    pwm_value_0 = pwm_value_0 + 10;
+    if(pwm_value_0 >= 300)
+    {
+      pwm_value_0 = 10;
+    }
+    setPWM_0(pwm_value_0);
+    
+    pwm_value_1 = pwm_value_1 + 20;
+    if(pwm_value_1 >= 350)
+    {
+      pwm_value_1 = 10;
+    }
+    setPWM_1(pwm_value_1);
+    
+    osDelay(10);
     HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK\r\n", sizeof("RUN_STEPPER_MOTOR_TASK\r\n"), 10);
   }
   /* USER CODE END STEPPER_MOTOR_TASK_RUN */

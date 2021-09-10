@@ -436,7 +436,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 64-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1000-1;
+  htim3.Init.Period = 2650-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -740,11 +740,13 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 void STEPPER_MOTOR_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
-  uint16_t pwm_value_0 = 10;
-  uint16_t pwm_value_1 = 10;
+  uint16_t pwm_value_0 = 3; // NEMA23 - 5
+  uint16_t pwm_value_1 = 3; // NEMA23 - 5
+  uint16_t period_value = 1000;  // NEMA23 - 2000
+  int16_t step = 100;
   Enable_Motor_0();
-  setPWM_0(pwm_value_0);
-  setPWM_1(pwm_value_1);
+  setPWM_0(10);
+  setPWM_1(10);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   /* Infinite loop */
@@ -752,24 +754,37 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   {
     LED_Step_Motor_0(false);
     LED_Step_Motor_1(true);
-    osDelay(1000);
+    osDelay(250);
     LED_Step_Motor_0(true);
     LED_Step_Motor_1(false);
-    osDelay(1000);
-    
-    pwm_value_0 = pwm_value_0 + 10;
-    if(pwm_value_0 >= 300)
-    {
-      pwm_value_0 = 10;
-    }
+    osDelay(250);
     setPWM_0(pwm_value_0);
-    
-    pwm_value_1 = pwm_value_1 + 20;
-    if(pwm_value_1 >= 350)
-    {
-      pwm_value_1 = 10;
-    }
     setPWM_1(pwm_value_1);
+    /*period_value = period_value + 100;
+    if(period_value >= 1600) // NEMA23 - 2600
+    {
+      period_value = 800; // 1500 // NEMA23 - 2000
+    }
+    setPeriod(period_value);*/
+    
+    if(period_value <= 800) step = 100; // 800
+    if(period_value >= 1900) step = -100;
+    period_value += step;
+    setPeriod(period_value);
+    
+    /*pwm_value_0 = pwm_value_0 + 20;
+    if(pwm_value_0 >= 1200)
+    {
+      pwm_value_0 = 500;
+    }
+    setPWM_0(pwm_value_0);*/
+    
+    /*pwm_value_1 = pwm_value_1 + 20;
+    if(pwm_value_1 >= 1200)
+    {
+      pwm_value_1 = 500;
+    }
+    setPWM_1(pwm_value_1);*/
     
     osDelay(10);
     HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK\r\n", sizeof("RUN_STEPPER_MOTOR_TASK\r\n"), 10);

@@ -76,3 +76,8 @@ void setPWM_1(uint16_t pwm_value)
 {  
   htim3.Instance->CCR2 = pwm_value;  
 }
+void setPeriod(uint16_t period_value)
+{  
+  // TIMx->ARR
+  htim3.Instance->ARR = period_value;  
+}

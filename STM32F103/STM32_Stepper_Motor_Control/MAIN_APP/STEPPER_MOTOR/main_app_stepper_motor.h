@@ -16,3 +16,4 @@ void Set_Motor_Direction_0(MOTOR_DIRECTION_t direction);
 void Set_Motor_Direction_1(MOTOR_DIRECTION_t direction);
 void Set_PWM_0(uint16_t pwm_value);
 void Set_PWM_1(uint16_t pwm_value);
+void setPeriod(uint16_t period_value);

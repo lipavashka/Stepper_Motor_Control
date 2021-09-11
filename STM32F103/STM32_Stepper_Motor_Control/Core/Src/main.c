@@ -742,7 +742,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
   uint16_t pwm_value_0 = 3; // NEMA23 - 5
   uint16_t pwm_value_1 = 3; // NEMA23 - 5
-  uint16_t period_value = 1000;  // NEMA23 - 2000
+  uint16_t period_value = 2000;  // NEMA23 - 2000
   int16_t step = 100;
   Enable_Motor_0();
   setPWM_0(10);
@@ -767,8 +767,8 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     }
     setPeriod(period_value);*/
     
-    if(period_value <= 800) step = 100; // 800
-    if(period_value >= 1900) step = -100;
+    if(period_value <= 2000) step = 100; // NEMA17 800
+    if(period_value >= 6000) step = -100; // NEMA17 3500
     period_value += step;
     setPeriod(period_value);
     

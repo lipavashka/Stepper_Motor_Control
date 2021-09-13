@@ -1,6 +1,7 @@
 #MicroXplorer Configuration settings - do not modify
-FREERTOS.FootprintOK=false
-FREERTOS.IPParameters=Tasks01,FootprintOK,configTOTAL_HEAP_SIZE
+FREERTOS.FootprintOK=true
+FREERTOS.IPParameters=Tasks01,FootprintOK,configTOTAL_HEAP_SIZE,Queues01
+FREERTOS.Queues01=Queue_Set_New_Motor_Parameters,16,uint16_t,0,Dynamic,NULL,NULL
 FREERTOS.Tasks01=defaultTask,0,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL;LCD_Task,-3,128,LCD_TASK_RUN,Default,NULL,Dynamic,NULL,NULL;BUTTON_Task,-3,128,BUTTON_TASK_RUN,Default,NULL,Dynamic,NULL,NULL;EEPROM_Task,-3,128,EEPROM_TASK_RUN,Default,NULL,Dynamic,NULL,NULL;ROTARY_ENCODER,-3,128,ROTARY_ENCODER_TASK_RUN,Default,NULL,Dynamic,NULL,NULL;STEPPER_MOTOR_T,-3,128,STEPPER_MOTOR_TASK_RUN,Default,NULL,Dynamic,NULL,NULL
 FREERTOS.configTOTAL_HEAP_SIZE=6144
 File.Version=6
@@ -239,7 +240,7 @@ TIM3.AutoReloadPreload=TIM_AUTORELOAD_PRELOAD_ENABLE
 TIM3.Channel-PWM\ Generation1\ CH1=TIM_CHANNEL_1
 TIM3.Channel-PWM\ Generation2\ CH2=TIM_CHANNEL_2
 TIM3.IPParameters=Channel-PWM Generation1 CH1,AutoReloadPreload,Channel-PWM Generation2 CH2,Period,Prescaler
-TIM3.Period=2000-1
+TIM3.Period=2600-1
 TIM3.Prescaler=64-1
 USART1.IPParameters=VirtualMode
 USART1.VirtualMode=VM_ASYNC

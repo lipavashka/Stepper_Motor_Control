@@ -62,8 +62,18 @@ osThreadId BUTTON_TaskHandle;
 osThreadId EEPROM_TaskHandle;
 osThreadId ROTARY_ENCODERHandle;
 osThreadId STEPPER_MOTOR_THandle;
+osMessageQId Queue_Set_New_Motor_ParametersHandle;
 /* USER CODE BEGIN PV */
-
+//typedef struct {                                 // Message object structure
+//  // float    voltage;                              // AD result of measured voltage
+//  // float    current;                              // AD result of measured current
+//  int      counter;                              // A counter value
+//} T_MEAS;
+osPoolDef(mpool, 16, MOTOR_Queue_t);                    // Define memory pool
+osPoolId  mpool;
+osMessageQDef(MsgBox, 16, MOTOR_Queue_t);              // Define message queue
+osMessageQId  MsgBox;
+volatile MOTOR_Queue_t MOTOR_Queue_RX;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -136,6 +146,15 @@ int main(void)
   HAL_Delay(2000);
   lcd_clear ();
   lcd_put_cur(0, 0);
+  
+  MOTOR_Queue_RX.Enable_0 = false;
+  MOTOR_Queue_RX.Enable_1 = false;
+  MOTOR_Queue_RX.Period_0 = 0;
+  MOTOR_Queue_RX.Period_1 = 0;
+  MOTOR_Queue_RX.DutyCycle_0 = 0;
+  MOTOR_Queue_RX.DutyCycle_1 = 0;
+  MOTOR_Queue_RX.counter = 0;
+  
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -149,6 +168,14 @@ int main(void)
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* definition and creation of Queue_Set_New_Motor_Parameters */
+  // osMessageQDef(Queue_Set_New_Motor_Parameters, 16, &MOTOR_Queue_t);
+  // Queue_Set_New_Motor_ParametersHandle = osMessageCreate(osMessageQ(Queue_Set_New_Motor_Parameters), NULL);
+  
+  mpool = osPoolCreate(osPool(mpool));                 // create memory pool
+  MsgBox = osMessageCreate(osMessageQ(MsgBox), NULL);  // create msg queue
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -172,11 +199,11 @@ int main(void)
   EEPROM_TaskHandle = osThreadCreate(osThread(EEPROM_Task), NULL);
 
   /* definition and creation of ROTARY_ENCODER */
-  osThreadDef(ROTARY_ENCODER, ROTARY_ENCODER_TASK_RUN, osPriorityIdle, 0, 128);
+  osThreadDef(ROTARY_ENCODER, ROTARY_ENCODER_TASK_RUN, osPriorityIdle, 0, 256);
   ROTARY_ENCODERHandle = osThreadCreate(osThread(ROTARY_ENCODER), NULL);
 
   /* definition and creation of STEPPER_MOTOR_T */
-  osThreadDef(STEPPER_MOTOR_T, STEPPER_MOTOR_TASK_RUN, osPriorityIdle, 0, 128);
+  osThreadDef(STEPPER_MOTOR_T, STEPPER_MOTOR_TASK_RUN, osPriorityIdle, 0, 256);
   STEPPER_MOTOR_THandle = osThreadCreate(osThread(STEPPER_MOTOR_T), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -436,7 +463,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 64-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 2650-1;
+  htim3.Init.Period = 2600-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -713,19 +740,156 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN ROTARY_ENCODER_TASK_RUN */
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
-  uint8_t MSG[50] = {'\0'};
+  static uint32_t counter_TX_Messages = 0;
+  MOTOR_Queue_t *mptr;
+  static MOTOR_Queue_t  queue_motor_set_parametrs;
+  static int32_t queue_tx_step;
+ 
+  queue_motor_set_parametrs.Enable_0 = false;
+  queue_motor_set_parametrs.Enable_1 = false;
+  queue_motor_set_parametrs.Direction_0 = MOTOR_DIRECTION_Forward;
+  queue_motor_set_parametrs.Direction_1 = MOTOR_DIRECTION_Forward;
+  queue_motor_set_parametrs.Period_0 = 2000;
+  queue_motor_set_parametrs.Period_1 = 2000;
+  queue_motor_set_parametrs.DutyCycle_0 = 3;
+  queue_motor_set_parametrs.DutyCycle_1 = 3;
+  queue_motor_set_parametrs.counter = 0;
+  
+  /*mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+  mptr->counter = ++counter_TX_Messages;
+  osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
+  osDelay(100);*/
+ 
+  /*mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+  mptr->voltage = 227.23;                        // Prepare a 2nd message
+  mptr->current = 12.41;
+  mptr->counter = 170823;
+  osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
+  // osThreadYield();                               // Cooperative multitasking
+  osDelay(100);*/
+  
+  /*MOTOR_Queue_t  *rptr;
+  osEvent  evt;
+   
+    evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
+    if (evt.status == osEventMessage) 
+    {
+      rptr = evt.value.p;
+      // printf ("\nVoltage: %.2f V\n", rptr->voltage);
+      // printf ("Current: %.2f A\n", rptr->current);
+      // printf ("Number of cycles: %d\n", 1);
+      if(rptr->counter > 100)
+      {
+        rptr->counter = 0;
+      }
+      HAL_UART_Transmit(&huart3, "cycles: 2\r\n", sizeof("cycles: 2\r\n"), 10);
+      osPoolFree(mpool, rptr);                  // free memory allocated for message
+    }*/
+  
+//  /*put example messages to queues*/
+//  osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)temp_msg, osWaitForever);
+//  /*try to receive them*/
+//  tempEvent = osMessageGet(Queue_Set_New_Motor_ParametersHandle, osWaitForever);
+//  if (tempEvent.status == osEventMessage)
+//  {
+//    HAL_UART_Transmit(&huart3, "Queue Set New Motor Parameters message handler working with no error\r\n", sizeof("Queue Set New Motor Parameters message handler working with no error\r\n"), 10);
+//    rx_msg = tempEvent.value.p;
+//    HAL_UART_Transmit(&huart3, rx_msg, 7, 10);
+//    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+//  }
+  
+  /*
+  // 2 message
+  MOTOR_Queue_TX.Enable_0 = true;
+  MOTOR_Queue_TX.Enable_1 = true;
+  MOTOR_Queue_TX.DutyCycle_0 = 3;
+  MOTOR_Queue_TX.DutyCycle_1 = 3;
+  MOTOR_Queue_TX.Period_0 = 2000;
+  MOTOR_Queue_TX.Period_1 = 2000;
+  // temp_msg = "motor";
+  MOTOR_Queue_TX.test_message = temp_msg;
+  static void *queue_void = NULL;
+  queue_void = (void*)&MOTOR_Queue_TX;
+  
+  p_MOTOR_Queue_TX = &MOTOR_Queue_TX; // Allocate memory for the message
+  p_MOTOR_Queue_TX->Enable_0 = true;
+  p_MOTOR_Queue_TX->Enable_1 = true;
+  p_MOTOR_Queue_TX->DutyCycle_0 = 3;
+  p_MOTOR_Queue_TX->DutyCycle_1 = 3;
+  p_MOTOR_Queue_TX->Period_0 = 3000;
+  p_MOTOR_Queue_TX->Period_1 = 3000;
+  
+  osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)p_MOTOR_Queue_TX, osWaitForever);
+  osDelay(10);*/
+  /*try to receive them*/
+/*  tempEvent = osMessageGet(Queue_Set_New_Motor_ParametersHandle, osWaitForever);
+  if (tempEvent.status == osEventMessage)
+  {
+    // HAL_UART_Transmit(&huart3, "Queue Set New Motor Parameters message handler working with no error\r\n", sizeof("Queue Set New Motor Parameters message handler working with no error\r\n"), 10);
+    testMOTOR_Queue_RX = tempEvent.value.p;
+    if(testMOTOR_Queue_RX != NULL)
+    {
+      HAL_UART_Transmit(&huart3, "Queue message not empty\r\n", sizeof("Queue message not empty\r\n"), 10);
+      if(testMOTOR_Queue_RX->test_message[0] != NULL)
+      {
+        HAL_UART_Transmit(&huart3, &testMOTOR_Queue_RX->test_message[0], 7, 10);
+      }
+    }
+    else
+    {
+      HAL_UART_Transmit(&huart3, "Queue message is emty\r\n", sizeof("Queue message is empty\r\n"), 10);
+      testMOTOR_Queue_RX = NULL;
+    }
+    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+  }
+  */
+  
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  osDelay(3000);
   /* Infinite loop */
   for(;;)
   {
     LED_Encoder(true);
-    osDelay(1000);
+    osDelay(100);
     LED_Encoder(false);
     osDelay(1000);
-    sprintf((void*)MSG, "Encoder Switch Released, Encoder Ticks = %d\n\r", ((htim2.Instance->CNT)>>2));
-    HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
-    HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
+    // sprintf((void*)MSG, "Encoder Switch Released, Encoder Ticks = %d\n\r", ((htim2.Instance->CNT)>>2));
+    // HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
+    // HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
     HAL_UART_Transmit(&huart1, "RUN_ENCODER_TASK\r\n", sizeof("RUN_ENCODER_TASK\r\n"), 10);
+    HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
+    // osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)temp_msg, osWaitForever);
+    mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+
+    if(queue_motor_set_parametrs.Period_0 <= 2000)
+    {
+      queue_tx_step = 100; // NEMA17-800 NEMA23-2000
+    }
+    if(queue_motor_set_parametrs.Period_0 >= 6000)
+    {
+      queue_tx_step = -100; // NEMA17-3500 NEMA23-6000
+    }
+    queue_motor_set_parametrs.Period_0 += queue_tx_step;
+
+
+
+
+
+    mptr->Enable_0 = queue_motor_set_parametrs.Enable_0;
+    mptr->Enable_1 = queue_motor_set_parametrs.Enable_1;
+    mptr->Direction_0 = queue_motor_set_parametrs.Direction_0;
+    mptr->Direction_1 = queue_motor_set_parametrs.Direction_1;
+    mptr->Period_0 = queue_motor_set_parametrs.Period_0;
+    mptr->Period_1 = queue_motor_set_parametrs.Period_1;
+    mptr->DutyCycle_0 = queue_motor_set_parametrs.DutyCycle_0;
+    mptr->DutyCycle_1 = queue_motor_set_parametrs.DutyCycle_1;
+
+
+
+
+    queue_motor_set_parametrs.counter = queue_motor_set_parametrs.counter + 1;
+    mptr->counter = queue_motor_set_parametrs.counter;
+    osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
   }
   /* USER CODE END ROTARY_ENCODER_TASK_RUN */
 }
@@ -740,26 +904,87 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 void STEPPER_MOTOR_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
+//  static osEvent queue_MotorEvent;
+//  static uint8_t* queue_motor_rx_msg = NULL;
+  
+  // volatile static uint32_t counter_RX_Messages = 0;
+  static MOTOR_Queue_t  *rx_rptr;
+  osEvent  rx_evt;
+
   uint16_t pwm_value_0 = 3; // NEMA23 - 5
   uint16_t pwm_value_1 = 3; // NEMA23 - 5
-  uint16_t period_value = 2000;  // NEMA23 - 2000
-  int16_t step = 100;
+  // static uint16_t period_value = 2000;  // NEMA23 - 2000
+  // static int16_t step = 100;
+  // volatile static uint32_t timer_status = (uint32_t)HAL_TIM_CHANNEL_STATE_RESET;  
   Enable_Motor_0();
   setPWM_0(10);
   setPWM_1(10);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+  // osDelay(1000);
   /* Infinite loop */
   for(;;)
   {
-    LED_Step_Motor_0(false);
-    LED_Step_Motor_1(true);
-    osDelay(250);
     LED_Step_Motor_0(true);
+    LED_Step_Motor_1(true);
+    osDelay(25);
+    LED_Step_Motor_0(false);
     LED_Step_Motor_1(false);
-    osDelay(250);
-    setPWM_0(pwm_value_0);
+    osDelay(25);
+    // setPWM_0(pwm_value_0);
     setPWM_1(pwm_value_1);
+    
+    rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
+    if (rx_evt.status == osEventMessage) 
+    {
+      rx_rptr = rx_evt.value.p;
+      /*printf ("\nVoltage: %.2f V\n", rx_rptr->voltage);
+      printf ("Current: %.2f A\n", rx_rptr->current);
+      printf ("Number of cycles: %d\n", 1);*/
+      /*counter_RX_Messages = rx_rptr->counter;      
+      if(counter_RX_Messages > 100)
+      {
+        counter_RX_Messages = 0;
+      }*/
+      
+      
+      
+      
+      
+      MOTOR_Queue_RX.Enable_0 = rx_rptr->Enable_0;
+      MOTOR_Queue_RX.Enable_1 = rx_rptr->Enable_1;
+      MOTOR_Queue_RX.Direction_0 = rx_rptr->Direction_0;
+      MOTOR_Queue_RX.Direction_1 = rx_rptr->Direction_1;
+      MOTOR_Queue_RX.Period_0 = rx_rptr->Period_0;
+      MOTOR_Queue_RX.Period_1 = rx_rptr->Period_1;
+      MOTOR_Queue_RX.DutyCycle_0 = rx_rptr->DutyCycle_0;
+      MOTOR_Queue_RX.DutyCycle_1 = rx_rptr->DutyCycle_1;
+      MOTOR_Queue_RX.counter = rx_rptr->counter;
+      
+      
+      
+      
+      
+      
+      /*if(MOTOR_Queue_RX.counter++ > 100)
+      {
+        MOTOR_Queue_RX.counter = 0;
+      }*/
+      osPoolFree(mpool, rx_rptr);                  // free memory allocated for message
+      HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
+      // <- here show message
+      HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+    }
+    
+    /*queue_MotorEvent = osMessageGet(Queue_Set_New_Motor_ParametersHandle, osWaitForever);
+    if (queue_MotorEvent.status == osEventMessage)
+    {
+      HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);
+      queue_motor_rx_msg = queue_MotorEvent.value.p;
+      HAL_UART_Transmit(&huart3, queue_motor_rx_msg, 7, 10);
+      HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+    }*/
+  
     /*period_value = period_value + 100;
     if(period_value >= 1600) // NEMA23 - 2600
     {
@@ -767,10 +992,56 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     }
     setPeriod(period_value);*/
     
-    if(period_value <= 2000) step = 100; // NEMA17-800 NEMA23-2000
-    if(period_value >= 6000) step = -100; // NEMA17-3500 NEMA23-6000
-    period_value += step;
-    setPeriod(period_value);
+    /*if(period_value <= 2000)
+    {
+      step = 100; // NEMA17-800 NEMA23-2000
+    }
+    if(period_value >= 6000)
+    {
+      step = -100; // NEMA17-3500 NEMA23-6000
+    }
+    period_value += step;*/
+
+
+    if(MOTOR_Queue_RX.Enable_0 == true)
+    {
+      setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
+      setPWM_0(MOTOR_Queue_RX.DutyCycle_0);
+      Set_Motor_Direction_0(MOTOR_Queue_RX.Direction_0);
+      Enable_Motor_0();
+      /*if(htim3.ChannelState[0] == HAL_TIM_CHANNEL_STATE_READY)
+      {
+        HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+      }*/
+    }
+    else
+    {
+      // setPeriod(0);
+      // setPWM_0(0);
+      Disable_Motor_0();
+      /*timer_status = (uint32_t)htim3.ChannelState[0];
+      switch((uint32_t)htim3.ChannelState[0])
+      {
+        case((uint32_t)HAL_TIM_CHANNEL_STATE_RESET):
+        {
+          break;
+        }
+        case((uint32_t)HAL_TIM_CHANNEL_STATE_READY):
+        {
+          break;
+        }
+        case((uint32_t)HAL_TIM_CHANNEL_STATE_BUSY):
+        {
+          // HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+          break;
+        }
+        default:
+        {
+          break;
+        }
+      }*/
+    }
+
     
     /*pwm_value_0 = pwm_value_0 + 20;
     if(pwm_value_0 >= 1200)
@@ -786,7 +1057,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     }
     setPWM_1(pwm_value_1);*/
     
-    osDelay(10);
+    // osDelay(10);
     HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK\r\n", sizeof("RUN_STEPPER_MOTOR_TASK\r\n"), 10);
   }
   /* USER CODE END STEPPER_MOTOR_TASK_RUN */

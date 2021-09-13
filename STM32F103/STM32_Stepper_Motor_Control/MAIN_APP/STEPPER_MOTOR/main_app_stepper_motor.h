@@ -1,12 +1,7 @@
 #pragma once
 #include "stdint.h"
 #include "stdbool.h"
-
-typedef enum
-{
-  MOTOR_DIRECTION_Forward = 1,
-  MOTOR_DIRECTION_Reverse = -1
-} MOTOR_DIRECTION_t;
+#include "stepper_motor_type.h"
 
 void Enable_Motor_0(void);
 void Disable_Motor_0(void);

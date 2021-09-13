@@ -846,7 +846,7 @@
                 <expressions>
                     <item>htim2</item>
                     <item>htim3</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

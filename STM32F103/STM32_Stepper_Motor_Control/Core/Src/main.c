@@ -767,8 +767,8 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     }
     setPeriod(period_value);*/
     
-    if(period_value <= 2000) step = 100; // NEMA17 800
-    if(period_value >= 6000) step = -100; // NEMA17 3500
+    if(period_value <= 2000) step = 100; // NEMA17-800 NEMA23-2000
+    if(period_value >= 6000) step = -100; // NEMA17-3500 NEMA23-6000
     period_value += step;
     setPeriod(period_value);
     

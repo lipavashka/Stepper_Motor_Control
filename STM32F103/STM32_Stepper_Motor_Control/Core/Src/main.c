@@ -58,9 +58,6 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
 
 osThreadId defaultTaskHandle;
-osThreadId LCD_TaskHandle;
-osThreadId BUTTON_TaskHandle;
-osThreadId EEPROM_TaskHandle;
 osThreadId ROTARY_ENCODERHandle;
 osThreadId STEPPER_MOTOR_THandle;
 /* USER CODE BEGIN PV */
@@ -87,9 +84,6 @@ static void MX_RTC_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_IWDG_Init(void);
 void StartDefaultTask(void const * argument);
-void LCD_TASK_RUN(void const * argument);
-void BUTTON_TASK_RUN(void const * argument);
-void EEPROM_TASK_RUN(void const * argument);
 void ROTARY_ENCODER_TASK_RUN(void const * argument);
 void STEPPER_MOTOR_TASK_RUN(void const * argument);
 
@@ -180,18 +174,6 @@ int main(void)
   /* definition and creation of defaultTask */
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-
-  /* definition and creation of LCD_Task 
-  osThreadDef(LCD_Task, LCD_TASK_RUN, osPriorityIdle, 0, 128);
-  LCD_TaskHandle = osThreadCreate(osThread(LCD_Task), NULL);*/
-
-  /* definition and creation of BUTTON_Task 
-  osThreadDef(BUTTON_Task, BUTTON_TASK_RUN, osPriorityIdle, 0, 128);
-  BUTTON_TaskHandle = osThreadCreate(osThread(BUTTON_Task), NULL);*/
-
-  /* definition and creation of EEPROM_Task 
-  osThreadDef(EEPROM_Task, EEPROM_TASK_RUN, osPriorityIdle, 0, 128);
-  EEPROM_TaskHandle = osThreadCreate(osThread(EEPROM_Task), NULL);*/
 
   /* definition and creation of ROTARY_ENCODER */
   osThreadDef(ROTARY_ENCODER, ROTARY_ENCODER_TASK_RUN, osPriorityIdle, 0, 128);
@@ -646,82 +628,6 @@ void StartDefaultTask(void const * argument)
     osDelay(1);
   }
   /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_LCD_TASK_RUN */
-/**
-* @brief Function implementing the LCD_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_LCD_TASK_RUN */
-void LCD_TASK_RUN(void const * argument)
-{
-  /* USER CODE BEGIN LCD_TASK_RUN */
-  lcd_send_string ("RUN_LCD_TASK...");
-  /* Infinite loop */
-  for(;;)
-  {
-    HAL_IWDG_Refresh(&hiwdg);
-    LED_LCD(true);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    osDelay(500);
-    LED_LCD(false);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-    osDelay(500);
-    LED_UART1(true);
-    osDelay(100);
-    LED_UART1(false);
-    HAL_UART_Transmit(&huart1, "RUN_LCD_TASK\r\n", sizeof("RUN_LCD_TASK\r\n"), 10);
-  }
-  /* USER CODE END LCD_TASK_RUN */
-}
-
-/* USER CODE BEGIN Header_BUTTON_TASK_RUN */
-/**
-* @brief Function implementing the BUTTON_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_BUTTON_TASK_RUN */
-void BUTTON_TASK_RUN(void const * argument)
-{
-  /* USER CODE BEGIN BUTTON_TASK_RUN */
-  /* Infinite loop */
-  for(;;)
-  {
-    LED_Button(true);
-    osDelay(100);
-    LED_Button(false);
-    osDelay(1000);
-    LED_UART3(true);
-    osDelay(100);
-    LED_UART3(false);
-    HAL_UART_Transmit(&huart1, "RUN_BUTTON_TASK\r\n", sizeof("RUN_BUTTON_TASK\r\n"), 10);
-  }
-  /* USER CODE END BUTTON_TASK_RUN */
-}
-
-/* USER CODE BEGIN Header_EEPROM_TASK_RUN */
-/**
-* @brief Function implementing the EEPROM_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_EEPROM_TASK_RUN */
-void EEPROM_TASK_RUN(void const * argument)
-{
-  /* USER CODE BEGIN EEPROM_TASK_RUN */
-  /* Infinite loop */
-  for(;;)
-  {
-    LED_EEPROM(true);
-    osDelay(300);
-    LED_EEPROM(false);
-    osDelay(2000);
-    HAL_UART_Transmit(&huart1, "RUN_EEPROM_TASK\r\n", sizeof("RUN_EEPROM_TASK\r\n"), 10);
-  }
-  /* USER CODE END EEPROM_TASK_RUN */
 }
 
 /* USER CODE BEGIN Header_ROTARY_ENCODER_TASK_RUN */

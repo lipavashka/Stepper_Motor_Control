@@ -2,6 +2,9 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "stepper_motor_type.h"
+#include "stepper_motor_state_mashine.h"
+
+extern STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
 
 void Enable_Motor_0(void);
 void Disable_Motor_0(void);

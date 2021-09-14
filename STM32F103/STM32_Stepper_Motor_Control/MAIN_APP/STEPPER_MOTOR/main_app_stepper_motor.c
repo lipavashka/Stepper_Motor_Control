@@ -3,6 +3,8 @@
 
 extern TIM_HandleTypeDef htim3;
 
+//  STEPPER_MOTOR_Init_State_Mashine
+
 void Enable_Motor_0(void)
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);

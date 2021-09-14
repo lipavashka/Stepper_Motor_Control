@@ -1307,6 +1307,12 @@
                 <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\main_app_stepper_motor.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_state_mashine.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_state_mashine.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_type.h</name>
             </file>
         </group>

@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
+#include "STEPPER_MOTOR/stepper_motor_state_mashine.h"
 #include "STEPPER_MOTOR/execute_stepper_motor.h"
 #include <stdio.h>
 /* USER CODE END Includes */
@@ -895,21 +896,14 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 void STEPPER_MOTOR_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
-  // static MOTOR_Queue_t  *rx_rptr;
-  // osEvent  rx_evt;
+  STEPPER_MOTOR_Init_State_Mashine();
 
-  // uint16_t pwm_value_0 = 3; // NEMA23 - 5
-  // uint16_t pwm_value_1 = 3; // NEMA23 - 5
-  STEPPER_MOTOR_Init_State_Mashine(&STEPPER_MOTOR_CONTROL);
+  SET_PWM_0(10);
+  SET_PWM_1(10);
 
-  // set_PWM_0(10);
-  // set_PWM_1(10);
-  
-  SET_PWM_0(10);  
-  SET_PWM_1(10);  
-  
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+
   /* Infinite loop */
   for(;;)
   {
@@ -918,46 +912,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     osDelay(25);
     LED_Step_Motor_0(false);
     LED_Step_Motor_1(false);
-    osDelay(25);   
-
-    /* rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
-    if (rx_evt.status == osEventMessage) 
-    {
-      taskENTER_CRITICAL();
-      rx_rptr = rx_evt.value.p;
-
-      MOTOR_Queue_RX.Enable_0 = rx_rptr->Enable_0;
-      MOTOR_Queue_RX.Enable_1 = rx_rptr->Enable_1;
-      MOTOR_Queue_RX.Direction_0 = rx_rptr->Direction_0;
-      MOTOR_Queue_RX.Direction_1 = rx_rptr->Direction_1;
-      MOTOR_Queue_RX.Period_0 = rx_rptr->Period_0;
-      MOTOR_Queue_RX.Period_1 = rx_rptr->Period_1;
-      MOTOR_Queue_RX.DutyCycle_0 = rx_rptr->DutyCycle_0;
-      MOTOR_Queue_RX.DutyCycle_1 = rx_rptr->DutyCycle_1;
-      MOTOR_Queue_RX.counter = rx_rptr->counter;
-
-      osPoolFree(mpool, rx_rptr);                  // free memory allocated for message
-      HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
-      // <- here show message
-      HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
-      taskEXIT_CRITICAL();
-    } */
-    
-    /* taskENTER_CRITICAL();
-    if(MOTOR_Queue_RX.Enable_0 == true)
-    {
-      setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
-      // set_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
-      SET_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
-      Set_Motor_Direction_0(MOTOR_Queue_RX.Direction_0);
-      Enable_Motor_0();
-    }
-    else
-    {
-      Disable_Motor_0();
-    }
-    taskEXIT_CRITICAL(); */
-    
+    osDelay(25);
     // HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
     STEPPER_MOTOR_Run_State_Mashine();
     // HAL_UART_Transmit(&huart1, "END_STEPPER_MOTOR_TASK\r\n", sizeof("END_STEPPER_MOTOR_TASK\r\n"), 10);

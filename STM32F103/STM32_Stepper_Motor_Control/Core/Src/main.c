@@ -171,14 +171,11 @@ int main(void)
 
   /* Create the queue(s) */
   /* definition and creation of Queue_Set_New_Motor_Parameters */
-  // osMessageQDef(Queue_Set_New_Motor_Parameters, 16, &MOTOR_Queue_t);
-  // Queue_Set_New_Motor_ParametersHandle = osMessageCreate(osMessageQ(Queue_Set_New_Motor_Parameters), NULL);
-  
+  osMessageQDef(Queue_Set_New_Motor_Parameters, 16, MOTOR_Queue_t);
+  Queue_Set_New_Motor_ParametersHandle = osMessageCreate(osMessageQ(Queue_Set_New_Motor_Parameters), NULL);
+  /* USER CODE BEGIN RTOS_QUEUES */
   mpool = osPoolCreate(osPool(mpool));                 // create memory pool
   MsgBox = osMessageCreate(osMessageQ(MsgBox), NULL);  // create msg queue
-
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */

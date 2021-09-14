@@ -1,10 +1,14 @@
 #include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart3;
+osEvent  rx_evt;
+
 volatile MOTOR_Queue_t MOTOR_Queue_RX;
-osPoolId  mpool;
+// osPoolId  mpool;
 osMessageQId  MsgBox;
-MOTOR_Queue_t  *rx_rptr;
+// MOTOR_Queue_t  *rx_rptr;
 
 extern TIM_HandleTypeDef htim3;
 
@@ -41,7 +45,11 @@ void Set_Motor_Direction_0(MOTOR_DIRECTION_t direction)
       break;
     }
     default:
+    {
+      Disable_Motor_0();
       while(1);
+      break;
+    }
   } 
 }
 void Set_Motor_Direction_1(MOTOR_DIRECTION_t direction)
@@ -59,7 +67,11 @@ void Set_Motor_Direction_1(MOTOR_DIRECTION_t direction)
       break;
     }
     default:
+    {
+      Disable_Motor_1();
       while(1);
+      break;
+    }
   } 
 }
 /*void Set_PWM_0(uint16_t pwm_value)
@@ -96,3 +108,68 @@ void setPeriod(uint16_t period_value)
   // TIMx->ARR
   htim3.Instance->ARR = period_value;  
 }
+
+MOTOR_STATUS_t Execute_Motor_Waiting_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
+{
+  MOTOR_STATUS_t execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
+  static MOTOR_Queue_t  *p_rx_queue_data;
+
+  rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
+  if (rx_evt.status == osEventMessage) 
+  {
+    taskENTER_CRITICAL();
+    if(rx_evt.value.p != NULL)
+    {
+      p_rx_queue_data = rx_evt.value.p;
+
+      MOTOR_Queue_RX.Enable_0 = p_rx_queue_data->Enable_0;
+      MOTOR_Queue_RX.Enable_1 = p_rx_queue_data->Enable_1;
+      MOTOR_Queue_RX.Direction_0 = p_rx_queue_data->Direction_0;
+      MOTOR_Queue_RX.Direction_1 = p_rx_queue_data->Direction_1;
+      MOTOR_Queue_RX.Period_0 = p_rx_queue_data->Period_0;
+      MOTOR_Queue_RX.Period_1 = p_rx_queue_data->Period_1;
+      MOTOR_Queue_RX.DutyCycle_0 = p_rx_queue_data->DutyCycle_0;
+      MOTOR_Queue_RX.DutyCycle_1 = p_rx_queue_data->DutyCycle_1;
+      MOTOR_Queue_RX.counter = p_rx_queue_data->counter;
+
+      // osPoolFree(mpool, p_rx_queue_data);                  // free memory allocated for message
+      HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
+      // <- here show message
+      HAL_UART_Transmit(&huart3, "\r\n", 2, 10);/**/
+      execute_status = MOTOR_STATUS_WAITING_DATA_OK;
+    }
+    taskEXIT_CRITICAL();
+  }
+  else
+  {
+    HAL_UART_Transmit(&huart3, "Queue Motor RX << ERROR\r\n", sizeof("Queue Motor RX << ERROR\r\n"), 10);  
+    execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
+  }  
+
+  return execute_status;
+}
+    
+MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
+{
+  MOTOR_STATUS_t execute_status = MOTOR_STATUS_PARSE_DATA_ERROR;
+    
+  taskENTER_CRITICAL();
+  if(MOTOR_Queue_RX.Enable_0 == true)
+  {
+    setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
+    // set_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
+    SET_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
+    Set_Motor_Direction_0(MOTOR_Queue_RX.Direction_0);
+    Enable_Motor_0();
+  }
+  else
+  {
+    Disable_Motor_0();
+  }
+  taskEXIT_CRITICAL();
+  
+  execute_status = MOTOR_STATUS_PARSE_DATA_OK;
+
+  return execute_status;
+}
+    

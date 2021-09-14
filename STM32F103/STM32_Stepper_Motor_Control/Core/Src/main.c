@@ -69,8 +69,8 @@ osThreadId STEPPER_MOTOR_THandle;
 //  // float    current;                              // AD result of measured current
 //  int      counter;                              // A counter value
 //} T_MEAS;
-osPoolDef(mpool, 16, MOTOR_Queue_t);                    // Define memory pool
-extern osPoolId  mpool;
+// osPoolDef(mpool, 16, MOTOR_Queue_t);                    // Define memory pool
+// extern osPoolId  mpool;
 osMessageQDef(MsgBox, 16, MOTOR_Queue_t);              // Define message queue
 extern osMessageQId  MsgBox;
 extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
@@ -172,7 +172,7 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-  mpool = osPoolCreate(osPool(mpool));                 // create memory pool
+  // mpool = osPoolCreate(osPool(mpool));                 // create memory pool
   MsgBox = osMessageCreate(osMessageQ(MsgBox), NULL);  // create msg queue
   /* USER CODE END RTOS_QUEUES */
 
@@ -181,24 +181,24 @@ int main(void)
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  /* definition and creation of LCD_Task */
+  /* definition and creation of LCD_Task 
   osThreadDef(LCD_Task, LCD_TASK_RUN, osPriorityIdle, 0, 128);
-  LCD_TaskHandle = osThreadCreate(osThread(LCD_Task), NULL);
+  LCD_TaskHandle = osThreadCreate(osThread(LCD_Task), NULL);*/
 
-  /* definition and creation of BUTTON_Task */
+  /* definition and creation of BUTTON_Task 
   osThreadDef(BUTTON_Task, BUTTON_TASK_RUN, osPriorityIdle, 0, 128);
-  BUTTON_TaskHandle = osThreadCreate(osThread(BUTTON_Task), NULL);
+  BUTTON_TaskHandle = osThreadCreate(osThread(BUTTON_Task), NULL);*/
 
-  /* definition and creation of EEPROM_Task */
+  /* definition and creation of EEPROM_Task 
   osThreadDef(EEPROM_Task, EEPROM_TASK_RUN, osPriorityIdle, 0, 128);
-  EEPROM_TaskHandle = osThreadCreate(osThread(EEPROM_Task), NULL);
+  EEPROM_TaskHandle = osThreadCreate(osThread(EEPROM_Task), NULL);*/
 
   /* definition and creation of ROTARY_ENCODER */
   osThreadDef(ROTARY_ENCODER, ROTARY_ENCODER_TASK_RUN, osPriorityIdle, 0, 128);
   ROTARY_ENCODERHandle = osThreadCreate(osThread(ROTARY_ENCODER), NULL);
 
   /* definition and creation of STEPPER_MOTOR_T */
-  osThreadDef(STEPPER_MOTOR_T, STEPPER_MOTOR_TASK_RUN, osPriorityIdle, 0, 512);
+  osThreadDef(STEPPER_MOTOR_T, STEPPER_MOTOR_TASK_RUN, osPriorityIdle, 0, 128);
   STEPPER_MOTOR_THandle = osThreadCreate(osThread(STEPPER_MOTOR_T), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -736,7 +736,7 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   /* USER CODE BEGIN ROTARY_ENCODER_TASK_RUN */
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
   // static uint32_t counter_TX_Messages = 0;
-  MOTOR_Queue_t *mptr;
+  static MOTOR_Queue_t *mptr = NULL;
   static MOTOR_Queue_t  queue_motor_set_parametrs;
   static int32_t queue_tx_step;
  
@@ -749,6 +749,9 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   queue_motor_set_parametrs.DutyCycle_0 = 3;
   queue_motor_set_parametrs.DutyCycle_1 = 3;
   queue_motor_set_parametrs.counter = 0;
+  
+  // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+  mptr = &queue_motor_set_parametrs;
   
   /*mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
   mptr->counter = ++counter_TX_Messages;
@@ -842,22 +845,42 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   osDelay(3000);
   /* Infinite loop */
+  HAL_UART_Transmit(&huart1, "RUN_ENCODER_THREAD\r\n", sizeof("RUN_ENCODER_THREAD\r\n"), 10);
   for(;;)
   {
+    HAL_IWDG_Refresh(&hiwdg);
+    
+    LED_LCD(true);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+    osDelay(10);
+    LED_LCD(false);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+    LED_UART1(true);
+    osDelay(10);
+    LED_UART1(false);    
+    LED_Button(true);
+    osDelay(10);
+    LED_Button(false);
+    LED_UART3(true);
+    osDelay(10);
+    LED_UART3(false);    
+    LED_EEPROM(true);
+    osDelay(10);
+    LED_EEPROM(false);
     LED_Encoder(true);
     osDelay(100);
     LED_Encoder(false);
-    osDelay(1000);
+    osDelay(2000);
     // sprintf((void*)MSG, "Encoder Switch Released, Encoder Ticks = %d\n\r", ((htim2.Instance->CNT)>>2));
     // HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
     // HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
-    HAL_UART_Transmit(&huart1, "RUN_ENCODER_TASK\r\n", sizeof("RUN_ENCODER_TASK\r\n"), 10);
-    HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
+    HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
+    // HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
     // osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)temp_msg, osWaitForever);
     
     taskENTER_CRITICAL();
 
-    mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+    // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
     if(queue_motor_set_parametrs.Period_0 <= 2000)
     {
       queue_tx_step = 100; // NEMA17-800 NEMA23-2000
@@ -896,6 +919,7 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 void STEPPER_MOTOR_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
+  HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_Init_State_Mashine\r\n", sizeof("RUN_STEPPER_MOTOR_Init_State_Mashine\r\n"), 10);
   STEPPER_MOTOR_Init_State_Mashine();
 
   SET_PWM_0(10);
@@ -905,18 +929,24 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 
   /* Infinite loop */
+  HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_THREAD\r\n", sizeof("RUN_STEPPER_MOTOR_THREAD\r\n"), 10);
   for(;;)
   {
+    /*LED_Step_Motor_0(true);
+    LED_Step_Motor_1(true);
+    osDelay(25);
+    LED_Step_Motor_0(false);
+    LED_Step_Motor_1(false);
+    osDelay(25);*/
+    // HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
+    STEPPER_MOTOR_Run_State_Mashine();
+    HAL_UART_Transmit(&huart1, " 2. END_STEPPER_MOTOR_TASK\r\n", sizeof(" 2. END_STEPPER_MOTOR_TASK\r\n"), 10);
     LED_Step_Motor_0(true);
     LED_Step_Motor_1(true);
     osDelay(25);
     LED_Step_Motor_0(false);
     LED_Step_Motor_1(false);
     osDelay(25);
-    // HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
-    STEPPER_MOTOR_Run_State_Mashine();
-    // HAL_UART_Transmit(&huart1, "END_STEPPER_MOTOR_TASK\r\n", sizeof("END_STEPPER_MOTOR_TASK\r\n"), 10);
-    osDelay(10);
   }
   /* USER CODE END STEPPER_MOTOR_TASK_RUN */
 }

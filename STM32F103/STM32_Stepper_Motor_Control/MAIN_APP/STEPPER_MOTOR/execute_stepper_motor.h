@@ -4,7 +4,7 @@
 #include "stdbool.h"
 #include "stepper_motor_type.h"
 
-extern STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
+// extern STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
 
 void Enable_Motor_0(void);
 void Disable_Motor_0(void);
@@ -19,3 +19,6 @@ void Set_PWM_1(uint16_t pwm_value); */
 void SET_PWM_0(uint16_t pwm_value);
 void SET_PWM_1(uint16_t pwm_value);
 void setPeriod(uint16_t period_value);
+
+MOTOR_STATUS_t Execute_Motor_Waiting_Data(STEPPER_MOTOR_CONTROL_t *motor_control);
+MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control);

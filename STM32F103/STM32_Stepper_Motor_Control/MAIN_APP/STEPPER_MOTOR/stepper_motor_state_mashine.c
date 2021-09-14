@@ -6,6 +6,11 @@
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
+extern osPoolId  mpool;
+extern osMessageQId  MsgBox;
+extern MOTOR_Queue_t  *rx_rptr;
+
+osEvent  rx_evt;
 
 STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
 
@@ -16,6 +21,29 @@ void STEPPER_MOTOR_Init_State_Mashine(STEPPER_MOTOR_CONTROL_t *stepper_motor)
 
 void STEPPER_MOTOR_Run_State_Mashine(void)
 {
+  rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
+  if (rx_evt.status == osEventMessage) 
+  {
+    taskENTER_CRITICAL();
+    rx_rptr = rx_evt.value.p;
+
+    MOTOR_Queue_RX.Enable_0 = rx_rptr->Enable_0;
+    MOTOR_Queue_RX.Enable_1 = rx_rptr->Enable_1;
+    MOTOR_Queue_RX.Direction_0 = rx_rptr->Direction_0;
+    MOTOR_Queue_RX.Direction_1 = rx_rptr->Direction_1;
+    MOTOR_Queue_RX.Period_0 = rx_rptr->Period_0;
+    MOTOR_Queue_RX.Period_1 = rx_rptr->Period_1;
+    MOTOR_Queue_RX.DutyCycle_0 = rx_rptr->DutyCycle_0;
+    MOTOR_Queue_RX.DutyCycle_1 = rx_rptr->DutyCycle_1;
+    MOTOR_Queue_RX.counter = rx_rptr->counter;
+
+    osPoolFree(mpool, rx_rptr);                  // free memory allocated for message
+    HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
+    // <- here show message
+    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+    taskEXIT_CRITICAL();
+  }
+  
   taskENTER_CRITICAL();
   if(MOTOR_Queue_RX.Enable_0 == true)
   {

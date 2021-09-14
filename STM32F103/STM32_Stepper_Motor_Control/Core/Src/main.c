@@ -69,9 +69,9 @@ osThreadId STEPPER_MOTOR_THandle;
 //  int      counter;                              // A counter value
 //} T_MEAS;
 osPoolDef(mpool, 16, MOTOR_Queue_t);                    // Define memory pool
-osPoolId  mpool;
+extern osPoolId  mpool;
 osMessageQDef(MsgBox, 16, MOTOR_Queue_t);              // Define message queue
-osMessageQId  MsgBox;
+extern osMessageQId  MsgBox;
 extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
 /* USER CODE END PV */
 
@@ -895,8 +895,8 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 void STEPPER_MOTOR_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN STEPPER_MOTOR_TASK_RUN */
-  static MOTOR_Queue_t  *rx_rptr;
-  osEvent  rx_evt;
+  // static MOTOR_Queue_t  *rx_rptr;
+  // osEvent  rx_evt;
 
   // uint16_t pwm_value_0 = 3; // NEMA23 - 5
   // uint16_t pwm_value_1 = 3; // NEMA23 - 5
@@ -920,7 +920,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     LED_Step_Motor_1(false);
     osDelay(25);   
 
-    rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
+    /* rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
     if (rx_evt.status == osEventMessage) 
     {
       taskENTER_CRITICAL();
@@ -941,7 +941,8 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
       // <- here show message
       HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
       taskEXIT_CRITICAL();
-    }
+    } */
+    
     /* taskENTER_CRITICAL();
     if(MOTOR_Queue_RX.Enable_0 == true)
     {

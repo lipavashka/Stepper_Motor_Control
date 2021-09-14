@@ -1,4 +1,5 @@
 #pragma once
+#include "cmsis_os.h"
 #include "stdint.h"
 #include "stdbool.h"
 #include "stepper_motor_type.h"

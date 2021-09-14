@@ -2,6 +2,9 @@
 #include "stm32f1xx_hal.h"
 
 volatile MOTOR_Queue_t MOTOR_Queue_RX;
+osPoolId  mpool;
+osMessageQId  MsgBox;
+MOTOR_Queue_t  *rx_rptr;
 
 extern TIM_HandleTypeDef htim3;
 

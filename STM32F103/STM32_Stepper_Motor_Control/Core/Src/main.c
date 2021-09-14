@@ -25,7 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
-#include "STEPPER_MOTOR/main_app_stepper_motor.h"
+#include "STEPPER_MOTOR/execute_stepper_motor.h"
 #include <stdio.h>
 /* USER CODE END Includes */
 
@@ -734,7 +734,7 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN ROTARY_ENCODER_TASK_RUN */
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
-  static uint32_t counter_TX_Messages = 0;
+  // static uint32_t counter_TX_Messages = 0;
   MOTOR_Queue_t *mptr;
   static MOTOR_Queue_t  queue_motor_set_parametrs;
   static int32_t queue_tx_step;
@@ -898,12 +898,16 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   static MOTOR_Queue_t  *rx_rptr;
   osEvent  rx_evt;
 
-  uint16_t pwm_value_0 = 3; // NEMA23 - 5
-  uint16_t pwm_value_1 = 3; // NEMA23 - 5
+  // uint16_t pwm_value_0 = 3; // NEMA23 - 5
+  // uint16_t pwm_value_1 = 3; // NEMA23 - 5
   STEPPER_MOTOR_Init_State_Mashine(&STEPPER_MOTOR_CONTROL);
 
-  setPWM_0(10);
-  setPWM_1(10);
+  // set_PWM_0(10);
+  // set_PWM_1(10);
+  
+  SET_PWM_0(10);  
+  SET_PWM_1(10);  
+  
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   /* Infinite loop */
@@ -916,8 +920,6 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     LED_Step_Motor_1(false);
     osDelay(25);   
 
-    setPWM_1(pwm_value_1);
-    
     rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
     if (rx_evt.status == osEventMessage) 
     {
@@ -944,7 +946,8 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     if(MOTOR_Queue_RX.Enable_0 == true)
     {
       setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
-      setPWM_0(MOTOR_Queue_RX.DutyCycle_0);
+      // set_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
+      SET_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
       Set_Motor_Direction_0(MOTOR_Queue_RX.Direction_0);
       Enable_Motor_0();
     }

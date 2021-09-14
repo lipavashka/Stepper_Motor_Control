@@ -1,4 +1,4 @@
-#include "main_app_stepper_motor.h"
+#include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 
 extern TIM_HandleTypeDef htim3;
@@ -57,7 +57,7 @@ void Set_Motor_Direction_1(MOTOR_DIRECTION_t direction)
       while(1);
   } 
 }
-void setPWM_0(uint16_t pwm_value)
+/*void Set_PWM_0(uint16_t pwm_value)
 {
 //  TIM_OC_InitTypeDef sConfigOC;
 //
@@ -74,7 +74,15 @@ void setPWM_0(uint16_t pwm_value)
   htim3.Instance->CCR1 = pwm_value;
   
 }
-void setPWM_1(uint16_t pwm_value)
+void Set_PWM_1(uint16_t pwm_value)
+{  
+  htim3.Instance->CCR2 = pwm_value;  
+}*/
+void SET_PWM_0(uint16_t pwm_value)
+{ 
+  htim3.Instance->CCR1 = pwm_value;  
+}
+void SET_PWM_1(uint16_t pwm_value)
 {  
   htim3.Instance->CCR2 = pwm_value;  
 }

@@ -1301,10 +1301,10 @@
         <group>
             <name>STEPPER_MOTOR</name>
             <file>
-                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\main_app_stepper_motor.c</name>
+                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\execute_stepper_motor.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\main_app_stepper_motor.h</name>
+                <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\execute_stepper_motor.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_state_mashine.c</name>

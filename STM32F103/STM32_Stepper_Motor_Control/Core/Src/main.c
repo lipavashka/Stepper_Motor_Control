@@ -640,8 +640,9 @@ void StartDefaultTask(void const * argument)
 void ROTARY_ENCODER_TASK_RUN(void const * argument)
 {
   /* USER CODE BEGIN ROTARY_ENCODER_TASK_RUN */
+
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
-  // static uint32_t counter_TX_Messages = 0;
+
   static MOTOR_Queue_t *mptr = NULL;
   static MOTOR_Queue_t  queue_motor_set_parametrs;
   static int32_t queue_tx_step;
@@ -658,96 +659,7 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   
   // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
   mptr = &queue_motor_set_parametrs;
-  
-  /*mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
-  mptr->counter = ++counter_TX_Messages;
-  osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
-  osDelay(100);*/
- 
-  /*mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
-  mptr->voltage = 227.23;                        // Prepare a 2nd message
-  mptr->current = 12.41;
-  mptr->counter = 170823;
-  osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
-  // osThreadYield();                               // Cooperative multitasking
-  osDelay(100);*/
-  
-  /*MOTOR_Queue_t  *rptr;
-  osEvent  evt;
-   
-    evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
-    if (evt.status == osEventMessage) 
-    {
-      rptr = evt.value.p;
-      // printf ("\nVoltage: %.2f V\n", rptr->voltage);
-      // printf ("Current: %.2f A\n", rptr->current);
-      // printf ("Number of cycles: %d\n", 1);
-      if(rptr->counter > 100)
-      {
-        rptr->counter = 0;
-      }
-      HAL_UART_Transmit(&huart3, "cycles: 2\r\n", sizeof("cycles: 2\r\n"), 10);
-      osPoolFree(mpool, rptr);                  // free memory allocated for message
-    }*/
-  
-//  /*put example messages to queues*/
-//  osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)temp_msg, osWaitForever);
-//  /*try to receive them*/
-//  tempEvent = osMessageGet(Queue_Set_New_Motor_ParametersHandle, osWaitForever);
-//  if (tempEvent.status == osEventMessage)
-//  {
-//    HAL_UART_Transmit(&huart3, "Queue Set New Motor Parameters message handler working with no error\r\n", sizeof("Queue Set New Motor Parameters message handler working with no error\r\n"), 10);
-//    rx_msg = tempEvent.value.p;
-//    HAL_UART_Transmit(&huart3, rx_msg, 7, 10);
-//    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
-//  }
-  
-  /*
-  // 2 message
-  MOTOR_Queue_TX.Enable_0 = true;
-  MOTOR_Queue_TX.Enable_1 = true;
-  MOTOR_Queue_TX.DutyCycle_0 = 3;
-  MOTOR_Queue_TX.DutyCycle_1 = 3;
-  MOTOR_Queue_TX.Period_0 = 2000;
-  MOTOR_Queue_TX.Period_1 = 2000;
-  // temp_msg = "motor";
-  MOTOR_Queue_TX.test_message = temp_msg;
-  static void *queue_void = NULL;
-  queue_void = (void*)&MOTOR_Queue_TX;
-  
-  p_MOTOR_Queue_TX = &MOTOR_Queue_TX; // Allocate memory for the message
-  p_MOTOR_Queue_TX->Enable_0 = true;
-  p_MOTOR_Queue_TX->Enable_1 = true;
-  p_MOTOR_Queue_TX->DutyCycle_0 = 3;
-  p_MOTOR_Queue_TX->DutyCycle_1 = 3;
-  p_MOTOR_Queue_TX->Period_0 = 3000;
-  p_MOTOR_Queue_TX->Period_1 = 3000;
-  
-  osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)p_MOTOR_Queue_TX, osWaitForever);
-  osDelay(10);*/
-  /*try to receive them*/
-/*  tempEvent = osMessageGet(Queue_Set_New_Motor_ParametersHandle, osWaitForever);
-  if (tempEvent.status == osEventMessage)
-  {
-    // HAL_UART_Transmit(&huart3, "Queue Set New Motor Parameters message handler working with no error\r\n", sizeof("Queue Set New Motor Parameters message handler working with no error\r\n"), 10);
-    testMOTOR_Queue_RX = tempEvent.value.p;
-    if(testMOTOR_Queue_RX != NULL)
-    {
-      HAL_UART_Transmit(&huart3, "Queue message not empty\r\n", sizeof("Queue message not empty\r\n"), 10);
-      if(testMOTOR_Queue_RX->test_message[0] != NULL)
-      {
-        HAL_UART_Transmit(&huart3, &testMOTOR_Queue_RX->test_message[0], 7, 10);
-      }
-    }
-    else
-    {
-      HAL_UART_Transmit(&huart3, "Queue message is emty\r\n", sizeof("Queue message is empty\r\n"), 10);
-      testMOTOR_Queue_RX = NULL;
-    }
-    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
-  }
-  */
-  
+
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   osDelay(3000);
   /* Infinite loop */
@@ -777,12 +689,9 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     osDelay(100);
     LED_Encoder(false);
     osDelay(2000);
-    // sprintf((void*)MSG, "Encoder Switch Released, Encoder Ticks = %d\n\r", ((htim2.Instance->CNT)>>2));
-    // HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
     // HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
     HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
     // HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
-    // osMessagePut(Queue_Set_New_Motor_ParametersHandle, (uint32_t)temp_msg, osWaitForever);
     
     taskENTER_CRITICAL();
 
@@ -838,12 +747,6 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_THREAD\r\n", sizeof("RUN_STEPPER_MOTOR_THREAD\r\n"), 10);
   for(;;)
   {
-    /*LED_Step_Motor_0(true);
-    LED_Step_Motor_1(true);
-    osDelay(25);
-    LED_Step_Motor_0(false);
-    LED_Step_Motor_1(false);
-    osDelay(25);*/
     // HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
     STEPPER_MOTOR_Run_State_Mashine();
     HAL_UART_Transmit(&huart1, " 2. END_STEPPER_MOTOR_TASK\r\n", sizeof(" 2. END_STEPPER_MOTOR_TASK\r\n"), 10);

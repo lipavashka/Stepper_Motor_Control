@@ -62,7 +62,6 @@ osThreadId BUTTON_TaskHandle;
 osThreadId EEPROM_TaskHandle;
 osThreadId ROTARY_ENCODERHandle;
 osThreadId STEPPER_MOTOR_THandle;
-osMessageQId Queue_Set_New_Motor_ParametersHandle;
 /* USER CODE BEGIN PV */
 //typedef struct {                                 // Message object structure
 //  // float    voltage;                              // AD result of measured voltage
@@ -169,10 +168,6 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
-  /* Create the queue(s) */
-  /* definition and creation of Queue_Set_New_Motor_Parameters */
-  osMessageQDef(Queue_Set_New_Motor_Parameters, 16, MOTOR_Queue_t);
-  Queue_Set_New_Motor_ParametersHandle = osMessageCreate(osMessageQ(Queue_Set_New_Motor_Parameters), NULL);
   /* USER CODE BEGIN RTOS_QUEUES */
   mpool = osPoolCreate(osPool(mpool));                 // create memory pool
   MsgBox = osMessageCreate(osMessageQ(MsgBox), NULL);  // create msg queue

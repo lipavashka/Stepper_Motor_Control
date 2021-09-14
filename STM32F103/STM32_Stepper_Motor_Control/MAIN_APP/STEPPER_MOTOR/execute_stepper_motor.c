@@ -1,6 +1,8 @@
 #include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 
+volatile MOTOR_Queue_t MOTOR_Queue_RX;
+
 extern TIM_HandleTypeDef htim3;
 
 //  STEPPER_MOTOR_Init_State_Mashine

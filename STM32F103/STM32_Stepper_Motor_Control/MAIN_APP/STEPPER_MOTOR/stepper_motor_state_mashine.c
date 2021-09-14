@@ -1,9 +1,11 @@
 #include "stepper_motor_state_mashine.h"
+#include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
+extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
 
 STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
 
@@ -14,6 +16,21 @@ void STEPPER_MOTOR_Init_State_Mashine(STEPPER_MOTOR_CONTROL_t *stepper_motor)
 
 void STEPPER_MOTOR_Run_State_Mashine(void)
 {
+  taskENTER_CRITICAL();
+  if(MOTOR_Queue_RX.Enable_0 == true)
+  {
+    setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
+    // set_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
+    SET_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
+    Set_Motor_Direction_0(MOTOR_Queue_RX.Direction_0);
+    Enable_Motor_0();
+  }
+  else
+ {
+    Disable_Motor_0();
+  }
+  taskEXIT_CRITICAL();
+
   taskENTER_CRITICAL();
   HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
   /*stepper_motor->STATE_MASHINE.Current = MOTOR_STATE_INIT;

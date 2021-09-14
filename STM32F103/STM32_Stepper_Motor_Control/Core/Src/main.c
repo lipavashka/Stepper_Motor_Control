@@ -72,7 +72,7 @@ osPoolDef(mpool, 16, MOTOR_Queue_t);                    // Define memory pool
 osPoolId  mpool;
 osMessageQDef(MsgBox, 16, MOTOR_Queue_t);              // Define message queue
 osMessageQId  MsgBox;
-volatile MOTOR_Queue_t MOTOR_Queue_RX;
+extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -942,7 +942,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
       HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
       taskEXIT_CRITICAL();
     }
-    taskENTER_CRITICAL();
+    /* taskENTER_CRITICAL();
     if(MOTOR_Queue_RX.Enable_0 == true)
     {
       setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
@@ -955,7 +955,7 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
     {
       Disable_Motor_0();
     }
-    taskEXIT_CRITICAL();
+    taskEXIT_CRITICAL(); */
     
     // HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
     STEPPER_MOTOR_Run_State_Mashine();

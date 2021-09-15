@@ -1,19 +1,12 @@
-// #include "QUEUEs/queue_type.h"
+
 #include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 osEvent  rx_evt;
-
-// QUEUE_MOTOR_t MOTOR_Queue_RX;
-// osPoolId  mpool;
 osMessageQId  MsgBox;
-// MOTOR_Queue_t  *rx_rptr;
-
 extern TIM_HandleTypeDef htim3;
-
-//  STEPPER_MOTOR_Init_State_Mashine
 
 void Enable_Motor_0(void)
 {
@@ -141,49 +134,21 @@ MOTOR_STATUS_t Execute_Motor_Waiting_Data(STEPPER_MOTOR_CONTROL_t *motor_control
   taskENTER_CRITICAL();  
   if (rx_evt.status == osEventMessage) 
   {
-
     if(rx_evt.value.p == NULL)
     {
        while(1);
     }
     p_rx_queue_data = rx_evt.value.p;
-
-///* need to delete */        MOTOR_Queue_RX.Enable_0 = p_rx_queue_data->Enable_0;
-///* need to delete */        MOTOR_Queue_RX.Enable_1 = p_rx_queue_data->Enable_1;
-///* need to delete */        MOTOR_Queue_RX.Direction_0 = p_rx_queue_data->Direction_0;
-///* need to delete */        MOTOR_Queue_RX.Direction_1 = p_rx_queue_data->Direction_1;
-///* need to delete */        MOTOR_Queue_RX.Period_0 = p_rx_queue_data->Period_0;
-///* need to delete */        MOTOR_Queue_RX.Period_1 = p_rx_queue_data->Period_1;
-///* need to delete */        MOTOR_Queue_RX.DutyCycle_0 = p_rx_queue_data->DutyCycle_0;
-///* need to delete */        MOTOR_Queue_RX.DutyCycle_1 = p_rx_queue_data->DutyCycle_1;
-///* need to delete */        MOTOR_Queue_RX.counter = p_rx_queue_data->counter;
-// CopyData_from_Queue(&MOTOR_Queue_RX, p_rx_queue_data); 
- // CopyData_from_Queue(&motor_control->MOTOR_Queue_RX, p_rx_queue_data); // <- bug in this function
- // CopyData_from_Queue(&STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX, p_rx_queue_data);
- CopyData_from_Queue(p_queue_motor_control, p_rx_queue_data);
-
-//      motor_control->MOTOR_Queue_RX.Enable_0 = p_rx_queue_data->Enable_0;
-//      motor_control->MOTOR_Queue_RX.Enable_1 = p_rx_queue_data->Enable_1;
-//      motor_control->MOTOR_Queue_RX.Direction_0 = p_rx_queue_data->Direction_0;
-//      motor_control->MOTOR_Queue_RX.Direction_1 = p_rx_queue_data->Direction_1;
-//      motor_control->MOTOR_Queue_RX.Period_0 = p_rx_queue_data->Period_0;
-//      motor_control->MOTOR_Queue_RX.Period_1 = p_rx_queue_data->Period_1;
-//      motor_control->MOTOR_Queue_RX.DutyCycle_0 = p_rx_queue_data->DutyCycle_0;
-//      motor_control->MOTOR_Queue_RX.DutyCycle_1 = p_rx_queue_data->DutyCycle_1;
-//      motor_control->MOTOR_Queue_RX.counter = p_rx_queue_data->counter;
-
-// p_queue_motor_control->Direction_0 = p_rx_queue_data->Direction_0;
-
-      // osPoolFree(mpool, p_rx_queue_data);                  // free memory allocated for message
-      HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
-      // <- here show message
-      HAL_UART_Transmit(&huart3, "\r\n", 2, 10);/**/
-   execute_status = MOTOR_STATUS_WAITING_DATA_OK;
-
+    // CopyData_from_Queue(&motor_control->MOTOR_Queue_RX, p_rx_queue_data); // <- bug in this function
+    CopyData_from_Queue(p_queue_motor_control, p_rx_queue_data);
+    HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
+    // <- here show message
+    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+    execute_status = MOTOR_STATUS_WAITING_DATA_OK;
   }
   else
   {
-    // HAL_UART_Transmit(&huart3, "Queue Motor RX << ERROR\r\n", sizeof("Queue Motor RX << ERROR\r\n"), 10);  
+    HAL_UART_Transmit(&huart3, "Queue Motor RX << ERROR\r\n", sizeof("Queue Motor RX << ERROR\r\n"), 10);  
     execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
   }
     taskEXIT_CRITICAL();
@@ -194,29 +159,10 @@ MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
 {
   MOTOR_STATUS_t execute_status = MOTOR_STATUS_PARSE_DATA_ERROR;
 
-  /*
-  taskENTER_CRITICAL();
-  if(MOTOR_Queue_RX.Enable_0 == true)
-  {
-    setPeriod(MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
-    // set_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
-    SET_PWM_0(MOTOR_Queue_RX.DutyCycle_0);
-    Set_Motor_Direction_0(MOTOR_Queue_RX.Direction_0);
-    Enable_Motor_0();
-  }
-  else
-  {
-    Disable_Motor_0();
-  }
-  taskEXIT_CRITICAL();
-  */
-
-  
   taskENTER_CRITICAL();
   if(motor_control->MOTOR_Queue_RX.Enable_0 == true)
   {
-    setPeriod(motor_control->MOTOR_Queue_RX.Period_0); // setPeriod(period_value);
-    // set_PWM_0(motor_control->MOTOR_Queue_RX.DutyCycle_0);
+    setPeriod(motor_control->MOTOR_Queue_RX.Period_0);
     SET_PWM_0(motor_control->MOTOR_Queue_RX.DutyCycle_0);
     Set_Motor_Direction_0(motor_control->MOTOR_Queue_RX.Direction_0);
     Enable_Motor_0();

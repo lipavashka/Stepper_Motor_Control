@@ -10,6 +10,19 @@ ROTARY_ENCODER_t ROTARY_ENCODER;
 void ROTARY_ENCODER_Init_State_Mashine(void)
 {
   ROTARY_ENCODER.Flag_Complete_Encoder_Process = false;
+
+  ROTARY_ENCODER.queue_motor_set_parametrs.Enable_0 = false;
+  ROTARY_ENCODER.queue_motor_set_parametrs.Enable_1 = false;
+  ROTARY_ENCODER.queue_motor_set_parametrs.Direction_0 = QUEUE_MOTOR_DIRECTION_Forward;
+  ROTARY_ENCODER.queue_motor_set_parametrs.Direction_1 = QUEUE_MOTOR_DIRECTION_Forward;
+  ROTARY_ENCODER.queue_motor_set_parametrs.Period_0 = 2000;
+  ROTARY_ENCODER.queue_motor_set_parametrs.Period_1 = 2000;
+  ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_0 = 3;
+  ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_1 = 3;
+  ROTARY_ENCODER.queue_motor_set_parametrs.counter = 0;
+
+  ROTARY_ENCODER.mptr = &ROTARY_ENCODER.queue_motor_set_parametrs;
+
   ROTARY_ENCODER_Set_State(ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_DEFAULT);
 }
 

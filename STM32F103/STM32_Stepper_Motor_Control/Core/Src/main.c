@@ -645,25 +645,28 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
 
-  static QUEUE_MOTOR_t *mptr = NULL;
+  /*static QUEUE_MOTOR_t *mptr = NULL;
   static QUEUE_MOTOR_t  queue_motor_set_parametrs;
-  static int32_t queue_tx_step;
+  static int32_t queue_tx_step;*/
  
   HAL_UART_Transmit(&huart1, "RUN ROTARY_ENCODER_Init_State_Mashine\r\n", sizeof("RUN ROTARY_ENCODER_Init_State_Mashine\r\n"), 10);
+
   ROTARY_ENCODER_Init_State_Mashine();
   
-  queue_motor_set_parametrs.Enable_0 = false;
-  queue_motor_set_parametrs.Enable_1 = false;
-  queue_motor_set_parametrs.Direction_0 = QUEUE_MOTOR_DIRECTION_Forward;
-  queue_motor_set_parametrs.Direction_1 = QUEUE_MOTOR_DIRECTION_Forward;
-  queue_motor_set_parametrs.Period_0 = 2000;
-  queue_motor_set_parametrs.Period_1 = 2000;
-  queue_motor_set_parametrs.DutyCycle_0 = 3;
-  queue_motor_set_parametrs.DutyCycle_1 = 3;
-  queue_motor_set_parametrs.counter = 0;
-  
-  // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
-  mptr = &queue_motor_set_parametrs;
+/*
+//  queue_motor_set_parametrs.Enable_0 = false;
+//  queue_motor_set_parametrs.Enable_1 = false;
+//  queue_motor_set_parametrs.Direction_0 = QUEUE_MOTOR_DIRECTION_Forward;
+//  queue_motor_set_parametrs.Direction_1 = QUEUE_MOTOR_DIRECTION_Forward;
+//  queue_motor_set_parametrs.Period_0 = 2000;
+//  queue_motor_set_parametrs.Period_1 = 2000;
+//  queue_motor_set_parametrs.DutyCycle_0 = 3;
+//  queue_motor_set_parametrs.DutyCycle_1 = 3;
+//  queue_motor_set_parametrs.counter = 0;
+//  
+//  // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+//  mptr = &queue_motor_set_parametrs;
+*/
 
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   osDelay(3000);
@@ -702,33 +705,33 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     // HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
     // HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
     
-    taskENTER_CRITICAL();
-
-    // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
-    if(queue_motor_set_parametrs.Period_0 <= 2000)
-    {
-      queue_tx_step = 100; // NEMA17-800 NEMA23-2000
-    }
-    if(queue_motor_set_parametrs.Period_0 >= 6000)
-    {
-      queue_tx_step = -100; // NEMA17-3500 NEMA23-6000
-    }
-    queue_motor_set_parametrs.Period_0 += queue_tx_step;
-    
-    mptr->Enable_0 = queue_motor_set_parametrs.Enable_0;
-    mptr->Enable_1 = queue_motor_set_parametrs.Enable_1;
-    mptr->Direction_0 = queue_motor_set_parametrs.Direction_0;
-    mptr->Direction_1 = queue_motor_set_parametrs.Direction_1;
-    mptr->Period_0 = queue_motor_set_parametrs.Period_0;
-    mptr->Period_1 = queue_motor_set_parametrs.Period_1;
-    mptr->DutyCycle_0 = queue_motor_set_parametrs.DutyCycle_0;
-    mptr->DutyCycle_1 = queue_motor_set_parametrs.DutyCycle_1;
-    
-    queue_motor_set_parametrs.counter = queue_motor_set_parametrs.counter + 1;
-    mptr->counter = queue_motor_set_parametrs.counter;
-    osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
-
-    taskEXIT_CRITICAL();
+/*
+//    taskENTER_CRITICAL();
+//    // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
+//    if(queue_motor_set_parametrs.Period_0 <= 2000)
+//    {
+//      queue_tx_step = 100; // NEMA17-800 NEMA23-2000
+//    }
+//    if(queue_motor_set_parametrs.Period_0 >= 6000)
+//    {
+//      queue_tx_step = -100; // NEMA17-3500 NEMA23-6000
+//    }
+//    queue_motor_set_parametrs.Period_0 += queue_tx_step;
+//    
+//    mptr->Enable_0 = queue_motor_set_parametrs.Enable_0;
+//    mptr->Enable_1 = queue_motor_set_parametrs.Enable_1;
+//    mptr->Direction_0 = queue_motor_set_parametrs.Direction_0;
+//    mptr->Direction_1 = queue_motor_set_parametrs.Direction_1;
+//    mptr->Period_0 = queue_motor_set_parametrs.Period_0;
+//    mptr->Period_1 = queue_motor_set_parametrs.Period_1;
+//    mptr->DutyCycle_0 = queue_motor_set_parametrs.DutyCycle_0;
+//    mptr->DutyCycle_1 = queue_motor_set_parametrs.DutyCycle_1;
+//    
+//    queue_motor_set_parametrs.counter = queue_motor_set_parametrs.counter + 1;
+//    mptr->counter = queue_motor_set_parametrs.counter;
+//    osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
+//    taskEXIT_CRITICAL();
+*/
     
     LED_LCD(true);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);

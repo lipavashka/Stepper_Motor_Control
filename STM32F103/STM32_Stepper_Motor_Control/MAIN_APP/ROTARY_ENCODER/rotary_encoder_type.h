@@ -2,6 +2,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "QUEUEs/queue_type.h"
 
 typedef enum
 {
@@ -36,6 +37,8 @@ typedef struct
 typedef struct
 {
   ROTARY_ENCODER_STATUS_t Status;
+  QUEUE_MOTOR_t *mptr;
+  QUEUE_MOTOR_t queue_motor_set_parametrs;
   bool Flag_Complete_Encoder_Process;
   ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
 }ROTARY_ENCODER_t;

@@ -1,12 +1,12 @@
 #include "stepper_motor_state_mashine.h"
 #include "execute_stepper_motor.h"
-#include "QUEUEs/queue_type.h"
+// #include "QUEUEs/queue_type.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
-extern QUEUE_MOTOR_t MOTOR_Queue_RX;
+// extern QUEUE_MOTOR_t MOTOR_Queue_RX;
 // extern osPoolId  mpool;
 extern osMessageQId  MsgBox;
 QUEUE_MOTOR_t  *rx_rptr;
@@ -19,13 +19,23 @@ STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
 void STEPPER_MOTOR_Init_State_Mashine(void)
 {
   STEPPER_MOTOR_CONTROL.Flag_Complete_Motor_Process = false;
-  MOTOR_Queue_RX.Enable_0 = false;
-  MOTOR_Queue_RX.Enable_1 = false;
-  MOTOR_Queue_RX.Period_0 = 0;
-  MOTOR_Queue_RX.Period_1 = 0;
-  MOTOR_Queue_RX.DutyCycle_0 = 0;
-  MOTOR_Queue_RX.DutyCycle_1 = 0;
-  MOTOR_Queue_RX.counter = 0;
+  
+//  /* need to delete */  MOTOR_Queue_RX.Enable_0 = false;
+//  /* need to delete */  MOTOR_Queue_RX.Enable_1 = false;
+//  /* need to delete */  MOTOR_Queue_RX.Period_0 = 0;
+//  /* need to delete */  MOTOR_Queue_RX.Period_1 = 0;
+//  /* need to delete */  MOTOR_Queue_RX.DutyCycle_0 = 0;
+//  /* need to delete */  MOTOR_Queue_RX.DutyCycle_1 = 0;
+//  /* need to delete */  MOTOR_Queue_RX.counter = 0;
+  
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Enable_0 = false;
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Enable_1 = false;
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Period_0 = 3000;
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Period_1 = 4000;
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.DutyCycle_0 = 0;
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.DutyCycle_1 = 0;
+  STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.counter = 0;  
+  
   STEPPER_MOTOR_Set_State(MOTOR_STATE_IDLE, MOTOR_STATE_IDLE, MOTOR_STATE_DEFAULT);
 }
 

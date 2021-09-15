@@ -2,7 +2,7 @@
 #include "cmsis_os.h"
 #include "stdint.h"
 #include "stdbool.h"
-#include "QUEUEs/queue_type.h"
+// #include "QUEUEs/queue_type.h"
 #include "stepper_motor_type.h"
 
 // extern STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;

@@ -6,7 +6,7 @@
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
-extern volatile QUEUE_MOTOR_t MOTOR_Queue_RX;
+extern QUEUE_MOTOR_t MOTOR_Queue_RX;
 // extern osPoolId  mpool;
 extern osMessageQId  MsgBox;
 QUEUE_MOTOR_t  *rx_rptr;

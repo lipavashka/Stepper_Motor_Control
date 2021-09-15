@@ -72,7 +72,7 @@ osThreadId STEPPER_MOTOR_THandle;
 // extern osPoolId  mpool;
 osMessageQDef(MsgBox, 16, QUEUE_MOTOR_t);              // Define message queue
 extern osMessageQId  MsgBox;
-extern volatile QUEUE_MOTOR_t MOTOR_Queue_RX;
+extern QUEUE_MOTOR_t MOTOR_Queue_RX;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

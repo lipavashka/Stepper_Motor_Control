@@ -39,6 +39,8 @@ typedef struct
   ROTARY_ENCODER_STATUS_t Status;
   QUEUE_MOTOR_t *mptr;
   QUEUE_MOTOR_t queue_motor_set_parametrs;
+  uint32_t Read_RAW_Encoder_Value;
+  uint32_t RAW_Value;
   bool Flag_Complete_Encoder_Process;
   ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
 }ROTARY_ENCODER_t;

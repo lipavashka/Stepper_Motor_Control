@@ -1,6 +1,7 @@
 #include "rotary_encoder_execute.h"
 #include "stm32f1xx_hal.h"
 
+extern TIM_HandleTypeDef htim2;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern osMessageQId  MsgBox;
@@ -9,8 +10,54 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
 {
   ROTARY_ENCODER_STATUS_t execute_status = ROTARY_ENCODER_STATUS_WAITING_ENCODER_SENSOR_DATA_ERROR;
   static int32_t queue_tx_step = 0;
-
+  
   taskENTER_CRITICAL();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // osDelay(100);
+  rotary_encoder->Read_RAW_Encoder_Value = htim2.Instance->CNT;
+  if(rotary_encoder->Read_RAW_Encoder_Value > 32768)
+  {
+    rotary_encoder->RAW_Value = rotary_encoder->Read_RAW_Encoder_Value - 32768;
+  }
+  else
+  {
+    rotary_encoder->RAW_Value = 32768 - rotary_encoder->Read_RAW_Encoder_Value;
+  }
+  htim2.Instance->CNT = 32768;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   if(rotary_encoder->queue_motor_set_parametrs.Period_0 <= 2000)
   {
     queue_tx_step = 100; // NEMA17-800 NEMA23-2000

@@ -144,15 +144,7 @@ int main(void)
   HAL_Delay(2000);
   lcd_clear ();
   lcd_put_cur(0, 0);
-  
-  MOTOR_Queue_RX.Enable_0 = false;
-  MOTOR_Queue_RX.Enable_1 = false;
-  MOTOR_Queue_RX.Period_0 = 0;
-  MOTOR_Queue_RX.Period_1 = 0;
-  MOTOR_Queue_RX.DutyCycle_0 = 0;
-  MOTOR_Queue_RX.DutyCycle_1 = 0;
-  MOTOR_Queue_RX.counter = 0;
-  
+
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */

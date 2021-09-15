@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
+#include "ROTARY_ENCODER/rotary_encoder_state_mashine.h"    
 #include "STEPPER_MOTOR/stepper_motor_state_mashine.h"
 #include "STEPPER_MOTOR/execute_stepper_motor.h"
 #include <stdio.h>
@@ -647,6 +648,9 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   static MOTOR_Queue_t  queue_motor_set_parametrs;
   static int32_t queue_tx_step;
  
+  HAL_UART_Transmit(&huart1, "RUN ROTARY_ENCODER_Init_State_Mashine\r\n", sizeof("RUN ROTARY_ENCODER_Init_State_Mashine\r\n"), 10);
+  ROTARY_ENCODER_Init_State_Mashine();
+  
   queue_motor_set_parametrs.Enable_0 = false;
   queue_motor_set_parametrs.Enable_1 = false;
   queue_motor_set_parametrs.Direction_0 = MOTOR_DIRECTION_Forward;
@@ -667,8 +671,12 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   for(;;)
   {
     HAL_IWDG_Refresh(&hiwdg);
-    
-    LED_LCD(true);
+
+    HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
+
+    ROTARY_ENCODER_Run_State_Mashine();
+
+    /*LED_LCD(true);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
     osDelay(10);
     LED_LCD(false);
@@ -688,9 +696,9 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     LED_Encoder(true);
     osDelay(100);
     LED_Encoder(false);
-    osDelay(2000);
+    osDelay(2000);*/
     // HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
-    HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
+    // HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
     // HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
     
     taskENTER_CRITICAL();
@@ -720,6 +728,28 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
 
     taskEXIT_CRITICAL();
+    
+    LED_LCD(true);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+    osDelay(10);
+    LED_LCD(false);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+    LED_UART1(true);
+    osDelay(10);
+    LED_UART1(false);    
+    LED_Button(true);
+    osDelay(10);
+    LED_Button(false);
+    LED_UART3(true);
+    osDelay(10);
+    LED_UART3(false);    
+    LED_EEPROM(true);
+    osDelay(10);
+    LED_EEPROM(false);
+    LED_Encoder(true);
+    osDelay(100);
+    LED_Encoder(false);
+    osDelay(2000);
   }
   /* USER CODE END ROTARY_ENCODER_TASK_RUN */
 }

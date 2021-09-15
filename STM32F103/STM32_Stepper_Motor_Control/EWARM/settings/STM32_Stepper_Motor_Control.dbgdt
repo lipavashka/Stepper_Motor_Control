@@ -875,7 +875,7 @@
                     <item>MOTOR_Queue_RX</item>
                     <item>htim3.ChannelState[0]</item>
                     <item>STEPPER_MOTOR_CONTROL</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>
@@ -964,7 +964,7 @@
                     <item>rx_rptr</item>
                     <item>rx_moter_marametrs</item>
                     <item>MOTOR_Queue_RX</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

@@ -1,3 +1,4 @@
+#include "QUEUEs/queue_type.h"
 #include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 
@@ -30,16 +31,16 @@ void Disable_Motor_1(void)
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 }
-void Set_Motor_Direction_0(MOTOR_DIRECTION_t direction)
+void Set_Motor_Direction_0(QUEUE_MOTOR_DIRECTION_t direction)
 {
   switch (direction)
   {
-    case(MOTOR_DIRECTION_Forward):
+    case(QUEUE_MOTOR_DIRECTION_Forward):
     {
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
       break;
     }
-    case(MOTOR_DIRECTION_Reverse):
+    case(QUEUE_MOTOR_DIRECTION_Reverse):
     {
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
       break;
@@ -52,16 +53,16 @@ void Set_Motor_Direction_0(MOTOR_DIRECTION_t direction)
     }
   } 
 }
-void Set_Motor_Direction_1(MOTOR_DIRECTION_t direction)
+void Set_Motor_Direction_1(QUEUE_MOTOR_DIRECTION_t direction)
 {
   switch (direction)
   {
-    case(MOTOR_DIRECTION_Forward):
+    case(QUEUE_MOTOR_DIRECTION_Forward):
     {
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
       break;
     }
-    case(MOTOR_DIRECTION_Reverse):
+    case(QUEUE_MOTOR_DIRECTION_Reverse):
     {
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
       break;

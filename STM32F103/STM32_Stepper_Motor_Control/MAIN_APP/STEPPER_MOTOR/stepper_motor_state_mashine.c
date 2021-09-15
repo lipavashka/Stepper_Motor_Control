@@ -1,5 +1,6 @@
 #include "stepper_motor_state_mashine.h"
 #include "execute_stepper_motor.h"
+#include "QUEUEs/queue_type.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 

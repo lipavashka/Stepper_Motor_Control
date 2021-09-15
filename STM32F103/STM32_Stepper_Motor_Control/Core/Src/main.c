@@ -25,7 +25,8 @@
 /* USER CODE BEGIN Includes */
 #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
-#include "ROTARY_ENCODER/rotary_encoder_state_mashine.h"    
+#include "QUEUEs/queue_type.h"
+#include "ROTARY_ENCODER/rotary_encoder_state_mashine.h"
 #include "STEPPER_MOTOR/stepper_motor_state_mashine.h"
 #include "STEPPER_MOTOR/execute_stepper_motor.h"
 #include <stdio.h>
@@ -653,8 +654,8 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   
   queue_motor_set_parametrs.Enable_0 = false;
   queue_motor_set_parametrs.Enable_1 = false;
-  queue_motor_set_parametrs.Direction_0 = MOTOR_DIRECTION_Forward;
-  queue_motor_set_parametrs.Direction_1 = MOTOR_DIRECTION_Forward;
+  queue_motor_set_parametrs.Direction_0 = QUEUE_MOTOR_DIRECTION_Forward;
+  queue_motor_set_parametrs.Direction_1 = QUEUE_MOTOR_DIRECTION_Forward;
   queue_motor_set_parametrs.Period_0 = 2000;
   queue_motor_set_parametrs.Period_1 = 2000;
   queue_motor_set_parametrs.DutyCycle_0 = 3;

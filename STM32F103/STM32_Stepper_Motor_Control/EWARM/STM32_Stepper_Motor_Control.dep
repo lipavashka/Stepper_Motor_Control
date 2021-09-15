@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>4</fileVersion>
-    <fileChecksum>3241810453</fileChecksum>
+    <fileChecksum>1505089334</fileChecksum>
     <configuration>
         <name>STM32_Stepper_Motor_Control</name>
         <outputs>
@@ -205,6 +205,7 @@
             <file>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_type.h</file>
             <file>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_execute.h</file>
             <file>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_state_mashine.h</file>
+            <file>$PROJ_DIR$\..\MAIN_APP\QUEUEs\queue_type.h</file>
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\rotary_encoder_execute.o</file>
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\rotary_encoder_state_mashine.o</file>
             <file>$PROJ_DIR$\STM32_Stepper_Motor_Control\Obj\rotary_encoder_execute.xcl</file>
@@ -251,10 +252,6 @@
             <name>$PROJ_DIR$\..\Core\Src\main.c</name>
             <outputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 79</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
                     <file> 70</file>
                 </tool>
@@ -262,7 +259,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 147 142 69 49 111 45 51 178 117 80 52 65 63 112 58 124 121 114 191 83 160 89 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120 84 44 71 179 116 118 165 94 87 93 180 139 62 194 78 125 18 166 17 199 198 197 31 23 22 47</file>
+                    <file> 147 142 69 49 111 45 51 178 117 80 52 65 63 112 58 124 121 114 191 83 160 89 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120 84 44 71 179 116 118 165 94 87 93 180 139 62 194 78 125 18 166 17 200 199 198 197 31 23 22 47</file>
                 </tool>
             </inputs>
         </file>
@@ -555,10 +552,6 @@
             <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\execute_stepper_motor.c</name>
             <outputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 81</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
                     <file> 102</file>
                 </tool>
@@ -566,7 +559,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 22 84 44 160 80 52 65 63 112 89 117 71 179 116 118 165 94 114 87 93 180 139 62 194 78 125 166 23 142 69 49 111 45 51 178 58 124 121 191 83 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120</file>
+                    <file> 200 117 80 52 65 63 112 166 22 84 44 160 89 71 179 116 118 165 94 114 87 93 180 139 62 194 78 125 23 142 69 49 111 45 51 178 58 124 121 191 83 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120</file>
                 </tool>
             </inputs>
         </file>
@@ -707,10 +700,6 @@
             <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_state_mashine.c</name>
             <outputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 103</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
                     <file> 115</file>
                 </tool>
@@ -718,7 +707,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 31 117 80 52 65 63 112 166 23 22 84 44 160 89 71 179 116 118 165 94 114 87 93 180 139 62 194 78 125 142 69 49 111 45 51 178 58 124 121 191 83 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120</file>
+                    <file> 31 117 80 52 65 63 112 166 23 200 22 84 44 160 89 71 179 116 118 165 94 114 87 93 180 139 62 194 78 125 142 69 49 111 45 51 178 58 124 121 191 83 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120</file>
                 </tool>
             </inputs>
         </file>
@@ -961,7 +950,7 @@
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 95 104 107 98 81 155 143 170 100 79 135 174 123 85 200 201 73 103 60 88 106 82 134 133 183 181 42 164 56 74 64 186 189 43 150 86 192 156 41 76 54 113 136 66 173 140</file>
+                    <file> 95 104 107 98 81 155 143 170 100 79 135 174 123 85 201 202 73 103 60 88 106 82 134 133 183 181 42 164 56 74 64 186 189 43 150 86 192 156 41 76 54 113 136 66 173 140</file>
                 </tool>
             </inputs>
         </file>
@@ -970,11 +959,11 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 201</file>
+                    <file> 202</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 203</file>
+                    <file> 204</file>
                 </tool>
             </outputs>
             <inputs>
@@ -989,11 +978,11 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 200</file>
+                    <file> 201</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 202</file>
+                    <file> 203</file>
                 </tool>
             </outputs>
             <inputs>

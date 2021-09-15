@@ -1299,6 +1299,12 @@
             </file>
         </group>
         <group>
+            <name>QUEUEs</name>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\QUEUEs\queue_type.h</name>
+            </file>
+        </group>
+        <group>
             <name>ROTARY_ENCODER</name>
             <file>
                 <name>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_execute.c</name>

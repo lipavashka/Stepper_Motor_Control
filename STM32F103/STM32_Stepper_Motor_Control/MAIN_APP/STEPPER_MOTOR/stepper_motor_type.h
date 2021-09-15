@@ -2,26 +2,6 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include "QUEUEs/queue_type.h" // - delete in the future
-
-/*typedef enum
-{
-  MOTOR_DIRECTION_Forward = 1,
-  MOTOR_DIRECTION_Reverse = -1
-} MOTOR_DIRECTION_t;
-*/
-typedef struct
-{
-  bool Enable_0;
-  bool Enable_1;
-  QUEUE_MOTOR_DIRECTION_t Direction_0;
-  QUEUE_MOTOR_DIRECTION_t Direction_1;
-  uint16_t Period_0;
-  uint16_t Period_1;
-  uint16_t DutyCycle_0;
-  uint16_t DutyCycle_1;
-  uint32_t counter; 
-}MOTOR_Queue_t;
 
 typedef enum
 {

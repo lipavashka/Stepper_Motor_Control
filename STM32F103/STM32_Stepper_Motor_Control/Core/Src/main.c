@@ -70,9 +70,9 @@ osThreadId STEPPER_MOTOR_THandle;
 //} T_MEAS;
 // osPoolDef(mpool, 16, MOTOR_Queue_t);                    // Define memory pool
 // extern osPoolId  mpool;
-osMessageQDef(MsgBox, 16, MOTOR_Queue_t);              // Define message queue
+osMessageQDef(MsgBox, 16, QUEUE_MOTOR_t);              // Define message queue
 extern osMessageQId  MsgBox;
-extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
+extern volatile QUEUE_MOTOR_t MOTOR_Queue_RX;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -645,8 +645,8 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
 
-  static MOTOR_Queue_t *mptr = NULL;
-  static MOTOR_Queue_t  queue_motor_set_parametrs;
+  static QUEUE_MOTOR_t *mptr = NULL;
+  static QUEUE_MOTOR_t  queue_motor_set_parametrs;
   static int32_t queue_tx_step;
  
   HAL_UART_Transmit(&huart1, "RUN ROTARY_ENCODER_Init_State_Mashine\r\n", sizeof("RUN ROTARY_ENCODER_Init_State_Mashine\r\n"), 10);

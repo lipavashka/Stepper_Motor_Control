@@ -6,10 +6,10 @@
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
-extern volatile MOTOR_Queue_t MOTOR_Queue_RX;
+extern volatile QUEUE_MOTOR_t MOTOR_Queue_RX;
 // extern osPoolId  mpool;
 extern osMessageQId  MsgBox;
-MOTOR_Queue_t  *rx_rptr;
+QUEUE_MOTOR_t  *rx_rptr;
 
 extern osEvent  rx_evt;
 uint32_t current_state = 0;

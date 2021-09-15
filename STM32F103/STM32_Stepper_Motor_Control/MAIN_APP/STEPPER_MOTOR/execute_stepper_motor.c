@@ -6,7 +6,7 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 osEvent  rx_evt;
 
-volatile MOTOR_Queue_t MOTOR_Queue_RX;
+volatile QUEUE_MOTOR_t MOTOR_Queue_RX;
 // osPoolId  mpool;
 osMessageQId  MsgBox;
 // MOTOR_Queue_t  *rx_rptr;
@@ -113,7 +113,7 @@ void setPeriod(uint16_t period_value)
 MOTOR_STATUS_t Execute_Motor_Waiting_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
 {
   MOTOR_STATUS_t execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
-  static MOTOR_Queue_t  *p_rx_queue_data;
+  static QUEUE_MOTOR_t  *p_rx_queue_data;
 
   rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
   if (rx_evt.status == osEventMessage) 

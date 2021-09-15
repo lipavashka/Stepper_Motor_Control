@@ -252,6 +252,10 @@
             <name>$PROJ_DIR$\..\Core\Src\main.c</name>
             <outputs>
                 <tool>
+                    <name>ICCARM</name>
+                    <file> 79</file>
+                </tool>
+                <tool>
                     <name>BICOMP</name>
                     <file> 70</file>
                 </tool>
@@ -552,6 +556,10 @@
             <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\execute_stepper_motor.c</name>
             <outputs>
                 <tool>
+                    <name>ICCARM</name>
+                    <file> 81</file>
+                </tool>
+                <tool>
                     <name>BICOMP</name>
                     <file> 102</file>
                 </tool>
@@ -700,6 +708,10 @@
             <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_state_mashine.c</name>
             <outputs>
                 <tool>
+                    <name>ICCARM</name>
+                    <file> 103</file>
+                </tool>
+                <tool>
                     <name>BICOMP</name>
                     <file> 115</file>
                 </tool>
@@ -707,7 +719,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 31 117 80 52 65 63 112 166 23 200 22 84 44 160 89 71 179 116 118 165 94 114 87 93 180 139 62 194 78 125 142 69 49 111 45 51 178 58 124 121 191 83 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120</file>
+                    <file> 31 117 80 52 65 63 112 166 23 22 84 44 160 89 71 179 116 118 165 94 114 87 93 180 139 62 194 78 125 200 142 69 49 111 45 51 178 58 124 121 191 83 193 130 190 176 72 163 109 131 152 167 151 90 158 145 67 92 120</file>
                 </tool>
             </inputs>
         </file>

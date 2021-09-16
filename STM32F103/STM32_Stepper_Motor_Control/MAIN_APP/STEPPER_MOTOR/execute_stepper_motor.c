@@ -119,19 +119,23 @@ MOTOR_STATUS_t Execute_Motor_Waiting_Data(STEPPER_MOTOR_CONTROL_t *motor_control
   MOTOR_STATUS_t execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
   static QUEUE_MOTOR_t  *p_rx_queue_data;
   static QUEUE_MOTOR_t  *p_queue_motor_control = NULL;
+  static STEPPER_MOTOR_CONTROL_t *p_motor_control = NULL;
 
   if(motor_control == NULL)
   {
      while(1);
   }
+  p_motor_control = motor_control;
   p_queue_motor_control = &motor_control->MOTOR_Queue_RX;
   if(p_queue_motor_control == NULL)
   {
      while(1);
   }
   p_rx_queue_data = NULL;
+  p_motor_control->Flag_Object_Ready = true;
   rx_evt = osMessageGet(MsgBox, osWaitForever);  // wait for message
-  taskENTER_CRITICAL();  
+  taskENTER_CRITICAL();
+  p_motor_control->Flag_Object_Ready = false;
   if (rx_evt.status == osEventMessage) 
   {
     if(rx_evt.value.p == NULL)
@@ -162,10 +166,17 @@ MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
   taskENTER_CRITICAL();
   if(motor_control->MOTOR_Queue_RX.Enable_0 == true)
   {
-    setPeriod(motor_control->MOTOR_Queue_RX.Period_0);
-    SET_PWM_0(motor_control->MOTOR_Queue_RX.DutyCycle_0);
-    Set_Motor_Direction_0(motor_control->MOTOR_Queue_RX.Direction_0);
-    Enable_Motor_0();
+    if(motor_control->MOTOR_Queue_RX.Period_0 <= 39900)
+    {
+      setPeriod(motor_control->MOTOR_Queue_RX.Period_0);
+      SET_PWM_0(motor_control->MOTOR_Queue_RX.DutyCycle_0);
+      Set_Motor_Direction_0(motor_control->MOTOR_Queue_RX.Direction_0);
+      Enable_Motor_0();
+    }
+    else
+    {
+      Disable_Motor_0();
+    }
   }
   else
   {

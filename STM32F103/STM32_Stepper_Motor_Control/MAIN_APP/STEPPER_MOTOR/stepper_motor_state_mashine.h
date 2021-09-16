@@ -12,3 +12,4 @@ void STEPPER_MOTOR_RUN_PARSE_DATA_State(void);
 
 void STEPPER_MOTOR_Init_State_Mashine(void);
 void STEPPER_MOTOR_Run_State_Mashine(void);
+bool STEPPER_MOTOR_Get_Motor_Object_Ready_Flag(void);

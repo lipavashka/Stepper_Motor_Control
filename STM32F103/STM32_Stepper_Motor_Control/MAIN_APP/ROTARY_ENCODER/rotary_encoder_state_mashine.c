@@ -9,8 +9,8 @@ ROTARY_ENCODER_t ROTARY_ENCODER;
 
 void ROTARY_ENCODER_Init_State_Mashine(void)
 {
+  ROTARY_ENCODER.Flag_Motor_Object_Ready = false;
   ROTARY_ENCODER.Flag_Complete_Encoder_Process = false;
-
   ROTARY_ENCODER.queue_motor_set_parametrs.Enable_0 = false;
   ROTARY_ENCODER.queue_motor_set_parametrs.Enable_1 = false;
   ROTARY_ENCODER.queue_motor_set_parametrs.Direction_0 = QUEUE_MOTOR_DIRECTION_Forward;
@@ -20,7 +20,6 @@ void ROTARY_ENCODER_Init_State_Mashine(void)
   ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_0 = 3;
   ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_1 = 3;
   ROTARY_ENCODER.queue_motor_set_parametrs.counter = 0;
-
   ROTARY_ENCODER.mptr = &ROTARY_ENCODER.queue_motor_set_parametrs;
 
   ROTARY_ENCODER_Set_State(ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_DEFAULT);
@@ -144,6 +143,11 @@ void ROTARY_ENCODER_RUN_SEND_DATA_TO_MOTOR_THREAD_State(void)
       ROTARY_ENCODER_Set_State(ROTARY_ENCODER.STATE_MASHINE.Current, ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_DEFAULT);
       break;
     }
+    case(ROTARY_ENCODER_STATUS_MOTOR_OBJECT_IS_BUSY):
+    {
+      ROTARY_ENCODER_Set_State(ROTARY_ENCODER.STATE_MASHINE.Previous, ROTARY_ENCODER.STATE_MASHINE.Current, ROTARY_ENCODER_STATE_DEFAULT);
+      break;
+    }    
     case(ROTARY_ENCODER_STATUS_SEND_DATA_TO_MOTOR_THREAD_ERROR):
     {
       ROTARY_ENCODER_Set_State(ROTARY_ENCODER.STATE_MASHINE.Current, ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_DEFAULT);
@@ -161,4 +165,13 @@ static void ROTARY_ENCODER_Set_State(ROTARY_ENCODER_STATE_t previous, ROTARY_ENC
   ROTARY_ENCODER.STATE_MASHINE.Previous = previous;
   ROTARY_ENCODER.STATE_MASHINE.Current = current;
   ROTARY_ENCODER.STATE_MASHINE.Next = next;
+}
+
+void ROTARY_ENCODER_Init_Reference_Motor_Object_Ready(bool (*p_Motor_Object_Ready_Flag)(void))
+{
+  ROTARY_ENCODER.Is_Motor_Object_Ready = NULL;
+  if(p_Motor_Object_Ready_Flag != NULL)
+  {
+    ROTARY_ENCODER.Is_Motor_Object_Ready = p_Motor_Object_Ready_Flag;
+  }
 }

@@ -95,7 +95,10 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void MAIN_APP_INIT(void)
+{
+  ROTARY_ENCODER_Init_Reference_Motor_Object_Ready(STEPPER_MOTOR_Get_Motor_Object_Ready_Flag);
+}
 /* USER CODE END 0 */
 
 /**
@@ -134,6 +137,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
+  MAIN_APP_INIT();
   Disable_Motor_0();
   Disable_Motor_1();
   lcd_init ();
@@ -636,32 +640,13 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
   /* USER CODE BEGIN ROTARY_ENCODER_TASK_RUN */
 
   /*   https://deepbluembedded.com/stm32-timer-encoder-mode-stm32-rotary-encoder-interfacing/   */
-
-  /*static QUEUE_MOTOR_t *mptr = NULL;
-  static QUEUE_MOTOR_t  queue_motor_set_parametrs;
-  static int32_t queue_tx_step;*/
  
   HAL_UART_Transmit(&huart1, "RUN ROTARY_ENCODER_Init_State_Mashine\r\n", sizeof("RUN ROTARY_ENCODER_Init_State_Mashine\r\n"), 10);
 
   ROTARY_ENCODER_Init_State_Mashine();
-  
-/*
-//  queue_motor_set_parametrs.Enable_0 = false;
-//  queue_motor_set_parametrs.Enable_1 = false;
-//  queue_motor_set_parametrs.Direction_0 = QUEUE_MOTOR_DIRECTION_Forward;
-//  queue_motor_set_parametrs.Direction_1 = QUEUE_MOTOR_DIRECTION_Forward;
-//  queue_motor_set_parametrs.Period_0 = 2000;
-//  queue_motor_set_parametrs.Period_1 = 2000;
-//  queue_motor_set_parametrs.DutyCycle_0 = 3;
-//  queue_motor_set_parametrs.DutyCycle_1 = 3;
-//  queue_motor_set_parametrs.counter = 0;
-//  
-//  // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
-//  mptr = &queue_motor_set_parametrs;
-*/
 
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
-  osDelay(3000);
+  osDelay(1000);
   /* Infinite loop */
   HAL_UART_Transmit(&huart1, "RUN_ENCODER_THREAD\r\n", sizeof("RUN_ENCODER_THREAD\r\n"), 10);
   for(;;)
@@ -672,80 +657,21 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
 
     ROTARY_ENCODER_Run_State_Mashine();
 
-    /*LED_LCD(true);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    osDelay(10);
-    LED_LCD(false);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);  // Led on Board
+    LED_LCD(true);    
     LED_UART1(true);
-    osDelay(10);
-    LED_UART1(false);    
     LED_Button(true);
-    osDelay(10);
-    LED_Button(false);
     LED_UART3(true);
-    osDelay(10);
-    LED_UART3(false);    
     LED_EEPROM(true);
-    osDelay(10);
-    LED_EEPROM(false);
     LED_Encoder(true);
-    osDelay(100);
-    LED_Encoder(false);
-    osDelay(2000);*/
-    // HAL_UART_Transmit(&huart3, "UART_3\r\n", sizeof("UART_3\r\n"), 10);
-    // HAL_UART_Transmit(&huart1, " 1. RUN_ENCODER_TASK\r\n", sizeof(" 1. RUN_ENCODER_TASK\r\n"), 10);
-    // HAL_UART_Transmit(&huart3, "Queue Motor TX >> \r\n", sizeof("Queue Motor TX >> \r\n"), 10);
-    
-/*
-//    taskENTER_CRITICAL();
-//    // mptr = osPoolAlloc(mpool);                     // Allocate memory for the message
-//    if(queue_motor_set_parametrs.Period_0 <= 2000)
-//    {
-//      queue_tx_step = 100; // NEMA17-800 NEMA23-2000
-//    }
-//    if(queue_motor_set_parametrs.Period_0 >= 6000)
-//    {
-//      queue_tx_step = -100; // NEMA17-3500 NEMA23-6000
-//    }
-//    queue_motor_set_parametrs.Period_0 += queue_tx_step;
-//    
-//    mptr->Enable_0 = queue_motor_set_parametrs.Enable_0;
-//    mptr->Enable_1 = queue_motor_set_parametrs.Enable_1;
-//    mptr->Direction_0 = queue_motor_set_parametrs.Direction_0;
-//    mptr->Direction_1 = queue_motor_set_parametrs.Direction_1;
-//    mptr->Period_0 = queue_motor_set_parametrs.Period_0;
-//    mptr->Period_1 = queue_motor_set_parametrs.Period_1;
-//    mptr->DutyCycle_0 = queue_motor_set_parametrs.DutyCycle_0;
-//    mptr->DutyCycle_1 = queue_motor_set_parametrs.DutyCycle_1;
-//    
-//    queue_motor_set_parametrs.counter = queue_motor_set_parametrs.counter + 1;
-//    mptr->counter = queue_motor_set_parametrs.counter;
-//    osMessagePut(MsgBox, (uint32_t)mptr, osWaitForever);  // Send Message
-//    taskEXIT_CRITICAL();
-*/
-    
-    LED_LCD(true);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    osDelay(10);
+    osDelay(50);
     LED_LCD(false);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-    LED_UART1(true);
-    osDelay(10);
-    LED_UART1(false);    
-    LED_Button(true);
-    osDelay(10);
+    LED_UART1(false);
     LED_Button(false);
-    LED_UART3(true);
-    osDelay(10);
-    LED_UART3(false);    
-    LED_EEPROM(true);
-    osDelay(10);
+    LED_UART3(false);
     LED_EEPROM(false);
-    LED_Encoder(true);
-    osDelay(100);
     LED_Encoder(false);
-    osDelay(2000);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);   // Led on Board   
   }
   /* USER CODE END ROTARY_ENCODER_TASK_RUN */
 }
@@ -775,13 +701,13 @@ void STEPPER_MOTOR_TASK_RUN(void const * argument)
   {
     // HAL_UART_Transmit(&huart1, "RUN_STEPPER_MOTOR_TASK  ", sizeof("RUN_STEPPER_MOTOR_TASK  "), 10);
     STEPPER_MOTOR_Run_State_Mashine();
-    HAL_UART_Transmit(&huart1, " 2. END_STEPPER_MOTOR_TASK\r\n", sizeof(" 2. END_STEPPER_MOTOR_TASK\r\n"), 10);
     LED_Step_Motor_0(true);
-    LED_Step_Motor_1(true);
-    osDelay(25);
+    LED_Step_Motor_1(true);  
+    HAL_UART_Transmit(&huart1, " 2. END_STEPPER_MOTOR_TASK\r\n", sizeof(" 2. END_STEPPER_MOTOR_TASK\r\n"), 10);
+    // osDelay(25);
     LED_Step_Motor_0(false);
     LED_Step_Motor_1(false);
-    osDelay(25);
+    // osDelay(25);
   }
   /* USER CODE END STEPPER_MOTOR_TASK_RUN */
 }

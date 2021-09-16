@@ -11,8 +11,8 @@ STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
 
 void STEPPER_MOTOR_Init_State_Mashine(void)
 {
+  STEPPER_MOTOR_CONTROL.Flag_Object_Ready = false;
   STEPPER_MOTOR_CONTROL.Flag_Complete_Motor_Process = false;
-
   STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Enable_0 = false;
   STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Enable_1 = false;
   STEPPER_MOTOR_CONTROL.MOTOR_Queue_RX.Period_0 = 0;
@@ -128,4 +128,9 @@ void STEPPER_MOTOR_RUN_PARSE_DATA_State(void)
   }
   
   STEPPER_MOTOR_CONTROL.Flag_Complete_Motor_Process = true;
+}
+
+bool STEPPER_MOTOR_Get_Motor_Object_Ready_Flag(void)
+{
+  return STEPPER_MOTOR_CONTROL.Flag_Object_Ready;
 }

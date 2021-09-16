@@ -35,6 +35,7 @@ typedef struct
 {
   MOTOR_STATUS_t Status;
   QUEUE_MOTOR_t MOTOR_Queue_RX;
+  bool Flag_Object_Ready;
   bool Flag_Complete_Motor_Process;
   MOTOR_STATE_MASHINE_t STATE_MASHINE;
 }STEPPER_MOTOR_CONTROL_t;

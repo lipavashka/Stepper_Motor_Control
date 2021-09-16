@@ -13,3 +13,4 @@ static void ROTARY_ENCODER_Set_State(ROTARY_ENCODER_STATE_t previous, ROTARY_ENC
 
 void ROTARY_ENCODER_Init_State_Mashine(void);
 void ROTARY_ENCODER_Run_State_Mashine(void);
+void  ROTARY_ENCODER_Init_Reference_Motor_Object_Ready(bool (*p_Motor_Object_Ready_Flag)(void));

@@ -12,7 +12,8 @@ typedef enum
   ROTARY_ENCODER_STATUS_PARSE_ENCODER_SENSOR_DATA_OK      = 3,
   ROTARY_ENCODER_STATUS_PARSE_ENCODER_SENSOR_DATA_ERROR   = 4,
   ROTARY_ENCODER_STATUS_SEND_DATA_TO_MOTOR_THREAD_OK      = 5,
-  ROTARY_ENCODER_STATUS_SEND_DATA_TO_MOTOR_THREAD_ERROR   = 6,
+  ROTARY_ENCODER_STATUS_MOTOR_OBJECT_IS_BUSY              = 6,
+  ROTARY_ENCODER_STATUS_SEND_DATA_TO_MOTOR_THREAD_ERROR   = 7,
   ROTARY_ENCODER_STATUS_ERROR                             = 0xFF,
 }ROTARY_ENCODER_STATUS_t;
 
@@ -34,6 +35,8 @@ typedef struct
   ROTARY_ENCODER_STATE_t Next;
 }ROTARY_ENCODER_STATE_MASHINE_t;
 
+typedef bool (*Check_Is_Motor_Object_Ready)(void);
+
 typedef struct
 {
   ROTARY_ENCODER_STATUS_t Status;
@@ -41,6 +44,9 @@ typedef struct
   QUEUE_MOTOR_t queue_motor_set_parametrs;
   uint32_t Read_RAW_Encoder_Value;
   uint32_t RAW_Value;
+  bool Flag_Motor_Object_Ready;
+  Check_Is_Motor_Object_Ready Is_Motor_Object_Ready;
   bool Flag_Complete_Encoder_Process;
   ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
 }ROTARY_ENCODER_t;
+

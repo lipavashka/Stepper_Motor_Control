@@ -62,17 +62,18 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
     
     
     
-  if(rotary_encoder->queue_motor_set_parametrs.Period_0 <= 2000)
+  /*if(rotary_encoder->queue_motor_set_parametrs.Period_0 <= 2000)
   {
     queue_tx_step = 100; // NEMA17-800 NEMA23-2000
   }
-  if(rotary_encoder->queue_motor_set_parametrs.Period_0 >= 3500/*6000*/)
+  if(rotary_encoder->queue_motor_set_parametrs.Period_0 >= 3500//6000//)
   {
     queue_tx_step = -100; // NEMA17-3500 NEMA23-6000
   }
   rotary_encoder->queue_motor_set_parametrs.Period_0 += queue_tx_step; 
+  */
 
-  rotary_encoder->queue_motor_set_parametrs.Period_0 = rotary_encoder->RAW_Value * 10;
+  /*rotary_encoder->queue_motor_set_parametrs.Period_0 = rotary_encoder->RAW_Value * 10;
   if(rotary_encoder->queue_motor_set_parametrs.Period_0 <= 40000)
   {
     rotary_encoder->queue_motor_set_parametrs.Period_0 = 40000 - rotary_encoder->queue_motor_set_parametrs.Period_0;
@@ -80,7 +81,9 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
   else
   {
     rotary_encoder->queue_motor_set_parametrs.Period_0 = 40000;
-  }
+  }*/
+  rotary_encoder->queue_motor_set_parametrs.Period_0 = 56250;
+  
   
   taskEXIT_CRITICAL();
 

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <settings>
     <StLinkDriver>
+        <stlinkserialNo>384C4E00</stlinkserialNo>
+        <stlinkfoundProbes />
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
         <stlinkResetStyle>0</stlinkResetStyle>
         <stlinkResetStrategy>2</stlinkResetStrategy>
-        <stlinkserialNo>384C4E00</stlinkserialNo>
-        <stlinkfoundProbes />
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>1984020653</Checksum>
+        <Checksum>3309283744</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -112,6 +112,10 @@
         <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Core\Src\stm32f1xx_it.c}.96.3" 0 0 1 "" 0 "" 0</Bp0>
         <Count>1</Count>
     </Breakpoints2>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -134,8 +138,4 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
 </settings>

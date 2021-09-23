@@ -166,7 +166,7 @@ MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
   taskENTER_CRITICAL();
   if(motor_control->MOTOR_Queue_RX.Enable_0 == true)
   {
-    if(motor_control->MOTOR_Queue_RX.Period_0 <= 39900)
+    if(motor_control->MOTOR_Queue_RX.Period_0 <= 59900)
     {
       setPeriod(motor_control->MOTOR_Queue_RX.Period_0);
       SET_PWM_0(motor_control->MOTOR_Queue_RX.DutyCycle_0);

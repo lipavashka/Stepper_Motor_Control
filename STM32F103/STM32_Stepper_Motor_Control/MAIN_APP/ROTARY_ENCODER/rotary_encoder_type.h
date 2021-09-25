@@ -52,6 +52,7 @@ typedef struct
   float64_t k_Set;
   float64_t k;
   
+  uint32_t number_of_Pulses;
   uint16_t Timer_Period_SET;
 }ROTARY_ENCODER_CONVERTER_t;
 
@@ -60,8 +61,11 @@ typedef struct
   ROTARY_ENCODER_STATUS_t Status;
   QUEUE_MOTOR_t *mptr;
   QUEUE_MOTOR_t queue_motor_set_parametrs;
-  uint32_t Read_RAW_Encoder_Value;
+  uint32_t Mean_RAW_Encoder_Value;
   uint32_t RAW_Value;
+  uint32_t RAW_Value_0;
+  uint32_t RAW_Value_1;
+  uint32_t RAW_Value_2;
   ROTARY_ENCODER_CONVERTER_t CONVERTER;
   bool Flag_Motor_Object_Ready;
   Check_Is_Motor_Object_Ready Is_Motor_Object_Ready;

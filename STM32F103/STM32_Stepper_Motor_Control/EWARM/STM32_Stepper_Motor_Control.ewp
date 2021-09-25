@@ -1221,6 +1221,9 @@
                 <name>$PROJ_DIR$\..\MAIN_APP\STEPPER_MOTOR\stepper_motor_type.h</name>
             </file>
         </group>
+        <file>
+            <name>$PROJ_DIR$\..\MAIN_APP\APPLICATION_SETTINGS.h</name>
+        </file>
     </group>
     <group>
         <name>Middlewares</name>

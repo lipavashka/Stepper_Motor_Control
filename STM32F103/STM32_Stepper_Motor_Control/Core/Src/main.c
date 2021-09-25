@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "APPLICATION_SETTINGS.h"
 #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
 #include "QUEUEs/queue_type.h"
@@ -664,7 +665,7 @@ void ROTARY_ENCODER_TASK_RUN(void const * argument)
     LED_UART3(true);
     LED_EEPROM(true);
     LED_Encoder(true);
-    osDelay(50);
+    osDelay(os_delay_rotary_encoder);
     LED_LCD(false);
     LED_UART1(false);
     LED_Button(false);

@@ -27,6 +27,9 @@ ROTARY_ENCODER_t ROTARY_ENCODER =
    },
    0,                                           // uint32_t Read_RAW_Encoder_Value;
    0,                                           // uint32_t RAW_Value;
+   32768,                                       // uint32_t RAW_Value_0;
+   32768,                                       // uint32_t RAW_Value_1;
+   32768,                                       // uint32_t RAW_Value_2;
    {
     // ROTARY_ENCODER_CONVERTER_t CONVERTER;
     R_motor,                                    // const uint32_t Rm;
@@ -35,9 +38,10 @@ ROTARY_ENCODER_t ROTARY_ENCODER =
     (_2PI * R_motor), // - for example    // uint32_t Cm_SET;  
     R_encoder,                                  // const uint32_t Re;
     (_2PI * R_encoder),                   // const double Ce;  
-    1000,                                       // const uint32_t k_Timer;
+    10000,                                       // const uint32_t k_Timer;
     0,                                          // uint32_t k__Set;
     0,                                          // uint32_t k;  
+    0,                                          // uint32_t number_of_Pulses;
     0                                           // uint16_t Timer_Period_SET;
    },
    false,                                       // bool Flag_Motor_Object_Ready;

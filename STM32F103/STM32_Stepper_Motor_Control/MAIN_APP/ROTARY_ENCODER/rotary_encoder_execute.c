@@ -14,29 +14,10 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
   static uint32_t RAW_Value_1 = 0;
   static uint32_t RAW_Value_2 = 0;
   
-  taskENTER_CRITICAL();
+  taskENTER_CRITICAL();  
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  // osDelay(100);
+
+
   rotary_encoder->Read_RAW_Encoder_Value = htim2.Instance->CNT;
   RAW_Value_0 = RAW_Value_1;
   RAW_Value_1 = RAW_Value_2;
@@ -52,15 +33,7 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
   }
   htim2.Instance->CNT = 32768;   
 
-    
 
-    
-    
-    
-    
-    
-    
-    
     
   /*if(rotary_encoder->queue_motor_set_parametrs.Period_0 <= 2000)
   {

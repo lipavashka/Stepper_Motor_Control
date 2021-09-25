@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "QUEUEs/queue_type.h"
+#include "arm_math.h"
 
 typedef enum
 {
@@ -39,11 +40,29 @@ typedef bool (*Check_Is_Motor_Object_Ready)(void);
 
 typedef struct
 {
+  const float64_t Rm;
+  const float64_t Cm;
+  const uint32_t Hols;
+  float64_t Cm_SET;
+  
+  const float64_t Re;
+  const float64_t Ce;
+  
+  const float64_t k_Timer;
+  float64_t k_Set;
+  float64_t k;
+  
+  uint16_t Timer_Period_SET;
+}ROTARY_ENCODER_CONVERTER_t;
+
+typedef struct
+{
   ROTARY_ENCODER_STATUS_t Status;
   QUEUE_MOTOR_t *mptr;
   QUEUE_MOTOR_t queue_motor_set_parametrs;
   uint32_t Read_RAW_Encoder_Value;
   uint32_t RAW_Value;
+  ROTARY_ENCODER_CONVERTER_t CONVERTER;
   bool Flag_Motor_Object_Ready;
   Check_Is_Motor_Object_Ready Is_Motor_Object_Ready;
   bool Flag_Complete_Encoder_Process;

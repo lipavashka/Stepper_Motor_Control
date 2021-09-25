@@ -5,7 +5,46 @@
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 
-ROTARY_ENCODER_t ROTARY_ENCODER;
+#define R_motor   25u
+#define R_encoder 25u
+#define _2PI ((2.0) * (PI))
+
+ROTARY_ENCODER_t ROTARY_ENCODER = 
+{
+   ROTARY_ENCODER_STATUS_ERROR,                 // ROTARY_ENCODER_STATUS_t Status;
+   NULL,                                        // QUEUE_MOTOR_t *mptr;
+   {
+    // QUEUE_MOTOR_t queue_motor_set_parametrs;
+    false,                                      // bool Enable_0;
+    false,                                      // bool Enable_1;
+    QUEUE_MOTOR_DIRECTION_Forward,              // QUEUE_MOTOR_DIRECTION_t Direction_0;
+    QUEUE_MOTOR_DIRECTION_Forward,              // QUEUE_MOTOR_DIRECTION_t Direction_1;
+    2000,                                       // uint16_t Period_0;
+    2000,                                       // uint16_t Period_1;
+    3,                                          // uint16_t DutyCycle_0;
+    3,                                          // uint16_t DutyCycle_1;
+    0                                           // uint32_t counter;  
+   },
+   0,                                           // uint32_t Read_RAW_Encoder_Value;
+   0,                                           // uint32_t RAW_Value;
+   {
+    // ROTARY_ENCODER_CONVERTER_t CONVERTER;
+    R_motor,                                    // const uint32_t Rm;
+    (_2PI * R_motor),                     // const double Cm;
+    1,                                          // const uint32_t Hols;
+    (_2PI * R_motor), // - for example    // uint32_t Cm_SET;  
+    R_encoder,                                  // const uint32_t Re;
+    (_2PI * R_encoder),                   // const double Ce;  
+    1000,                                       // const uint32_t k_Timer;
+    0,                                          // uint32_t k__Set;
+    0,                                          // uint32_t k;  
+    0                                           // uint16_t Timer_Period_SET;
+   },
+   false,                                       // bool Flag_Motor_Object_Ready;
+   NULL,                                        // Check_Is_Motor_Object_Ready Is_Motor_Object_Ready;
+   false,                                       // bool Flag_Complete_Encoder_Process;
+   ROTARY_ENCODER_STATE_IDLE                    // ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
+};
 
 void ROTARY_ENCODER_Init_State_Mashine(void)
 {

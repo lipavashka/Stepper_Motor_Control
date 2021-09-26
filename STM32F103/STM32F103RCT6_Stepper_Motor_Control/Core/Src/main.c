@@ -68,7 +68,8 @@ static void MX_TIM4_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  volatile uint32_t start_del = 0;
+  for(start_del = 0; start_del < 0x001FFFFF; start_del++) {};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

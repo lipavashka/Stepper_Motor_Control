@@ -56,7 +56,8 @@ osThreadId defaultTaskHandle;
 osThreadId ROTARY_ENCODERHandle;
 osThreadId STEPPER_MOTOR_THandle;
 /* USER CODE BEGIN PV */
-
+osMessageQDef(MsgBox, 16, QUEUE_MOTOR_t);              // Define message queue
+extern osMessageQId  MsgBox;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -159,7 +160,7 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
+   MsgBox = osMessageCreate(osMessageQ(MsgBox), NULL);  // create msg queue
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */

@@ -49,6 +49,8 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
+UART_HandleTypeDef huart5;
+
 osThreadId defaultTaskHandle;
 osThreadId ROTARY_ENCODERHandle;
 osThreadId STEPPER_MOTOR_THandle;
@@ -63,6 +65,7 @@ static void MX_TIM4_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_UART5_Init(void);
 void StartDefaultTask(void const * argument);
 void ROTARY_ENCODER_TASK_RUN(void const * argument);
 void STEPPER_MOTOR_TASK_RUN(void const * argument);
@@ -109,6 +112,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_I2C1_Init();
+  MX_UART5_Init();
   /* USER CODE BEGIN 2 */
   HAL_Delay(500);
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
@@ -122,17 +126,22 @@ int main(void)
   htim2.Instance->CCR4 = 300;   // set duty
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
   
+  SET_BIT(huart5.Instance->CR1, (USART_CR1_RXNEIE)); // Enable uart5 RX interrupt
+  
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
   HAL_Delay(500);
   
   lcd_init ();
+  HAL_Delay(500);
+  // lcd_clear ();
+  // lcd_put_cur(0, 0);
   lcd_send_string ("Potato planting");
   HAL_Delay(1000);
   lcd_put_cur(1, 0);
   lcd_send_string("machine");
   HAL_Delay(2000);
   // lcd_clear ();
-  // lcd_put_cur(0, 0);
+  lcd_put_cur(0, 0);
   
   /* USER CODE END 2 */
 
@@ -167,6 +176,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  HAL_UART_Transmit(&huart5, "\r\n ... RUN OS ... \r\n", sizeof("\r\n ... RUN OS ... \r\n"), 10);
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -455,6 +465,39 @@ static void MX_TIM4_Init(void)
 }
 
 /**
+  * @brief UART5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_UART5_Init(void)
+{
+
+  /* USER CODE BEGIN UART5_Init 0 */
+
+  /* USER CODE END UART5_Init 0 */
+
+  /* USER CODE BEGIN UART5_Init 1 */
+
+  /* USER CODE END UART5_Init 1 */
+  huart5.Instance = UART5;
+  huart5.Init.BaudRate = 115200;
+  huart5.Init.WordLength = UART_WORDLENGTH_8B;
+  huart5.Init.StopBits = UART_STOPBITS_1;
+  huart5.Init.Parity = UART_PARITY_NONE;
+  huart5.Init.Mode = UART_MODE_TX_RX;
+  huart5.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart5.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN UART5_Init 2 */
+
+  /* USER CODE END UART5_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -504,18 +547,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PC12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_12;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PD2 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 }
 

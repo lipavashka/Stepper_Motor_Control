@@ -1282,6 +1282,12 @@
         </group>
         <group>
             <name>LED</name>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\LEDs\main_app_led.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\LEDs\main_app_led.h</name>
+            </file>
         </group>
         <group>
             <name>QUEUEs</name>

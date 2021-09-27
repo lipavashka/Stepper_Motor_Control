@@ -40,9 +40,14 @@ typedef bool (*Check_Is_Motor_Object_Ready)(void);
 
 typedef struct
 {
+  uint32_t Count_Busy_Motor_Object;
+}RE_DEBUG_t;
+
+typedef struct
+{
   const float64_t Rm;
   const float64_t Cm;
-  const uint32_t Hols;
+  const uint32_t Hols; // Holes
   float64_t Cm_SET;
   
   const float64_t Re;
@@ -70,6 +75,7 @@ typedef struct
   bool Flag_Motor_Object_Ready;
   Check_Is_Motor_Object_Ready Is_Motor_Object_Ready;
   bool Flag_Complete_Encoder_Process;
+  RE_DEBUG_t RE_DEBUG;
   ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
 }ROTARY_ENCODER_t;
 

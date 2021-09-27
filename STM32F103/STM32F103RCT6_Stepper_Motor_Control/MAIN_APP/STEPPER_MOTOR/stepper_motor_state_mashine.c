@@ -3,8 +3,7 @@
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef *Debug_UART;
 extern osMessageQId  MsgBox;
 
 STEPPER_MOTOR_CONTROL_t STEPPER_MOTOR_CONTROL;
@@ -71,7 +70,7 @@ void STEPPER_MOTOR_RUN_IDLE_State(void)
 
 void STEPPER_MOTOR_RUN_INIT_State(void)
 {
-  HAL_UART_Transmit(&huart1, "RUN INIT\r\n", sizeof("RUN INIT\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "RUN INIT\r\n", sizeof("RUN INIT\r\n"), 10);
   STEPPER_MOTOR_CONTROL.Flag_Complete_Motor_Process = false;
   STEPPER_MOTOR_Set_State(STEPPER_MOTOR_CONTROL.STATE_MASHINE.Current, MOTOR_STATE_WAITING_DATA, MOTOR_STATE_DEFAULT);
 }
@@ -80,7 +79,7 @@ void STEPPER_MOTOR_RUN_WAITING_DATA_State(void)
 {
   MOTOR_STATUS_t execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
   
-  HAL_UART_Transmit(&huart1, "RUN WAITING_DATA\r\n", sizeof("RUN WAITING_DATA\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "RUN WAITING_DATA\r\n", sizeof("RUN WAITING_DATA\r\n"), 10);
   
   execute_status = Execute_Motor_Waiting_Data(&STEPPER_MOTOR_CONTROL);
 
@@ -106,7 +105,7 @@ void STEPPER_MOTOR_RUN_PARSE_DATA_State(void)
 {
   MOTOR_STATUS_t execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
   
-  HAL_UART_Transmit(&huart1, "RUN PARSE\r\n", sizeof("RUN PARSE\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "RUN PARSE\r\n", sizeof("RUN PARSE\r\n"), 10);
 
   execute_status = Execute_Motor_Parse_Data(&STEPPER_MOTOR_CONTROL);
 

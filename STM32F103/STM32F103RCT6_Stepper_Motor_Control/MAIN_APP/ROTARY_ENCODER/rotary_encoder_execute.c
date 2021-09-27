@@ -2,9 +2,8 @@
 #include "stm32f1xx_hal.h"
 #include "APPLICATION_SETTINGS.h"
 
-extern TIM_HandleTypeDef htim2;
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef *Debug_UART;
+extern TIM_HandleTypeDef *Encoder_Timer;
 extern osMessageQId  MsgBox;
 extern void Error_Handler(void);
 
@@ -22,7 +21,7 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
 
   rotary_encoder->RAW_Value_0 = rotary_encoder->RAW_Value_1;
   rotary_encoder->RAW_Value_1 = rotary_encoder->RAW_Value_2;
-  rotary_encoder->RAW_Value_2 = htim2.Instance->CNT;
+  rotary_encoder->RAW_Value_2 = Encoder_Timer->Instance->CNT;
   rotary_encoder->Mean_RAW_Encoder_Value = (rotary_encoder->RAW_Value_0 + rotary_encoder->RAW_Value_1 + rotary_encoder->RAW_Value_2) / 3;
   if(rotary_encoder->Mean_RAW_Encoder_Value > 32768)
   {
@@ -35,7 +34,7 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Waiting_Data(ROTARY_ENCODER_t *rot
   }
 
   rotary_encoder->RAW_Value = 0;
-  htim2.Instance->CNT = 32768;   
+  Encoder_Timer->Instance->CNT = 32768;   
 
 
     
@@ -155,6 +154,11 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Send_Data_To_Motor_Thread(ROTARY_E
   }
   else
   {
+    if(rotary_encoder->RE_DEBUG.Count_Busy_Motor_Object++ >= 500)
+    {
+      rotary_encoder->RE_DEBUG.Count_Busy_Motor_Object = 0;
+      HAL_UART_Transmit(Debug_UART, "Motor_Object is busy\r\n", sizeof("Motor_Object is busy\r\n"), 10);
+    }
     execute_status = ROTARY_ENCODER_STATUS_MOTOR_OBJECT_IS_BUSY; 
   }
 

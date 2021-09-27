@@ -2,19 +2,19 @@
 #include "execute_stepper_motor.h"
 #include "stm32f1xx_hal.h"
 
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef *Debug_UART;
 osEvent  rx_evt;
 osMessageQId  MsgBox;
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 
 void Enable_Motor_0(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 }
 void Disable_Motor_0(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 void Enable_Motor_1(void)
 {
@@ -30,12 +30,12 @@ void Set_Motor_Direction_0(QUEUE_MOTOR_DIRECTION_t direction)
   {
     case(QUEUE_MOTOR_DIRECTION_Forward):
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
       break;
     }
     case(QUEUE_MOTOR_DIRECTION_Reverse):
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
       break;
     }
     default:
@@ -91,7 +91,7 @@ void Set_PWM_1(uint16_t pwm_value)
 }*/
 void SET_PWM_0(uint16_t pwm_value)
 { 
-  htim3.Instance->CCR1 = pwm_value;  
+  htim2.Instance->CCR4 = pwm_value;  
 }
 void SET_PWM_1(uint16_t pwm_value)
 {  
@@ -101,6 +101,11 @@ void setPeriod(uint16_t period_value)
 {  
   // TIMx->ARR
   htim3.Instance->ARR = period_value;  
+}
+void setPeriod_Motor_0(uint16_t period_value)
+{  
+  // TIMx->ARR
+  htim2.Instance->ARR = period_value;  
 }
 void CopyData_from_Queue(QUEUE_MOTOR_t *out, const QUEUE_MOTOR_t *in)
 {
@@ -145,14 +150,14 @@ MOTOR_STATUS_t Execute_Motor_Waiting_Data(STEPPER_MOTOR_CONTROL_t *motor_control
     p_rx_queue_data = rx_evt.value.p;
     // CopyData_from_Queue(&motor_control->MOTOR_Queue_RX, p_rx_queue_data); // <- bug in this function
     CopyData_from_Queue(p_queue_motor_control, p_rx_queue_data);
-    HAL_UART_Transmit(&huart3, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
+    HAL_UART_Transmit(Debug_UART, "Queue Motor RX <<  ", sizeof("Queue Motor RX <<  "), 10);      
     // <- here show message
-    HAL_UART_Transmit(&huart3, "\r\n", 2, 10);
+    HAL_UART_Transmit(Debug_UART, "\r\n", 2, 10);
     execute_status = MOTOR_STATUS_WAITING_DATA_OK;
   }
   else
   {
-    HAL_UART_Transmit(&huart3, "Queue Motor RX << ERROR\r\n", sizeof("Queue Motor RX << ERROR\r\n"), 10);  
+    HAL_UART_Transmit(Debug_UART, "Queue Motor RX << ERROR\r\n", sizeof("Queue Motor RX << ERROR\r\n"), 10);  
     execute_status = MOTOR_STATUS_WAITING_DATA_ERROR;
   }
     taskEXIT_CRITICAL();
@@ -168,7 +173,7 @@ MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
   {
     if(motor_control->MOTOR_Queue_RX.Period_0 <= 59900)
     {
-      setPeriod(motor_control->MOTOR_Queue_RX.Period_0);
+      setPeriod_Motor_0(motor_control->MOTOR_Queue_RX.Period_0);
       SET_PWM_0(motor_control->MOTOR_Queue_RX.DutyCycle_0);
       Set_Motor_Direction_0(motor_control->MOTOR_Queue_RX.Direction_0);
       Enable_Motor_0();

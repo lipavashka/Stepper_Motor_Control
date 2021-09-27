@@ -2,8 +2,7 @@
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef *Debug_UART;
 
 #define R_motor   25u
 #define R_encoder 25u
@@ -47,7 +46,10 @@ ROTARY_ENCODER_t ROTARY_ENCODER =
    false,                                       // bool Flag_Motor_Object_Ready;
    NULL,                                        // Check_Is_Motor_Object_Ready Is_Motor_Object_Ready;
    false,                                       // bool Flag_Complete_Encoder_Process;
-   ROTARY_ENCODER_STATE_IDLE                    // ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
+    {
+     0                                          // RE_DEBUG_t RE_DEBUG;
+    },
+   ROTARY_ENCODER_STATE_IDLE                   // ROTARY_ENCODER_STATE_MASHINE_t STATE_MASHINE;
 };
 
 void ROTARY_ENCODER_Init_State_Mashine(void)
@@ -60,9 +62,10 @@ void ROTARY_ENCODER_Init_State_Mashine(void)
   ROTARY_ENCODER.queue_motor_set_parametrs.Direction_1 = QUEUE_MOTOR_DIRECTION_Forward;
   ROTARY_ENCODER.queue_motor_set_parametrs.Period_0 = 2000;
   ROTARY_ENCODER.queue_motor_set_parametrs.Period_1 = 2000;
-  ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_0 = 3;
-  ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_1 = 3;
+  ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_0 = 30;
+  ROTARY_ENCODER.queue_motor_set_parametrs.DutyCycle_1 = 30;
   ROTARY_ENCODER.queue_motor_set_parametrs.counter = 0;
+  ROTARY_ENCODER.RE_DEBUG.Count_Busy_Motor_Object = 0;
   ROTARY_ENCODER.mptr = &ROTARY_ENCODER.queue_motor_set_parametrs;
 
   ROTARY_ENCODER_Set_State(ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_DEFAULT);
@@ -108,13 +111,13 @@ void ROTARY_ENCODER_Run_State_Mashine(void)
 
 void ROTARY_ENCODER_RUN_IDLE_State(void)
 {
-  HAL_UART_Transmit(&huart1, "1.1 RUN IDLE\r\n", sizeof("1.1 RUN IDLE\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "1.1 RUN IDLE\r\n", sizeof("1.1 RUN IDLE\r\n"), 10);
   ROTARY_ENCODER_Set_State(ROTARY_ENCODER_STATE_IDLE, ROTARY_ENCODER_STATE_INIT, ROTARY_ENCODER_STATE_DEFAULT);
 }
 
 void ROTARY_ENCODER_RUN_INIT_State(void)
 {
-  HAL_UART_Transmit(&huart1, "1.2 RUN INIT\r\n", sizeof("1.2 RUN INIT\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "1.2 RUN INIT\r\n", sizeof("1.2 RUN INIT\r\n"), 10);
   ROTARY_ENCODER.Flag_Complete_Encoder_Process = false;
   ROTARY_ENCODER_Set_State(ROTARY_ENCODER.STATE_MASHINE.Current, ROTARY_ENCODER_STATE_WAITING_ENCODER_SENSOR_DATA, ROTARY_ENCODER_STATE_DEFAULT);
 }
@@ -123,7 +126,7 @@ void ROTARY_ENCODER_RUN_WAITING_ENCODER_SENSOR_DATA_State(void)
 {
   ROTARY_ENCODER_STATUS_t execute_status = ROTARY_ENCODER_STATUS_WAITING_ENCODER_SENSOR_DATA_ERROR;
 
-  HAL_UART_Transmit(&huart1, "1.3 RUN WAITING ENCODER SENSOR DATA\r\n", sizeof("1.3 RUN WAITING ENCODER SENSOR DATA\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "1.3 RUN WAITING ENCODER SENSOR DATA\r\n", sizeof("1.3 RUN WAITING ENCODER SENSOR DATA\r\n"), 10);
 
   execute_status = Execute_RotaryEncoder_Waiting_Data(&ROTARY_ENCODER);
 
@@ -149,7 +152,7 @@ void ROTARY_ENCODER_RUN_PARSE_ENCODER_SENSOR_DATA_State(void)
 {
   ROTARY_ENCODER_STATUS_t execute_status = ROTARY_ENCODER_STATUS_PARSE_ENCODER_SENSOR_DATA_ERROR;
 
-  HAL_UART_Transmit(&huart1, "1.4 RUN PARSE ENCODER SENSOR DATA\r\n", sizeof("1.4 RUN PARSE ENCODER SENSOR DATA\r\n"), 10);
+  HAL_UART_Transmit(Debug_UART, "1.4 RUN PARSE ENCODER SENSOR DATA\r\n", sizeof("1.4 RUN PARSE ENCODER SENSOR DATA\r\n"), 10);
 
   execute_status = Execute_RotaryEncoder_Parse_Data(&ROTARY_ENCODER);
 
@@ -175,7 +178,7 @@ void ROTARY_ENCODER_RUN_SEND_DATA_TO_MOTOR_THREAD_State(void)
 {
   ROTARY_ENCODER_STATUS_t execute_status = ROTARY_ENCODER_STATUS_SEND_DATA_TO_MOTOR_THREAD_ERROR;
 
-  HAL_UART_Transmit(&huart1, "1.5 RUN SEND DATA TO MOTOR THREAD\r\n", sizeof("1.5 RUN SEND DATA TO MOTOR THREAD\r\n"), 10);
+  // HAL_UART_Transmit(Debug_UART, "1.5 RUN SEND DATA TO MOTOR THREAD\r\n", sizeof("1.5 RUN SEND DATA TO MOTOR THREAD\r\n"), 10);
 
   execute_status = Execute_RotaryEncoder_Send_Data_To_Motor_Thread(&ROTARY_ENCODER);
 
@@ -216,5 +219,9 @@ void ROTARY_ENCODER_Init_Reference_Motor_Object_Ready(bool (*p_Motor_Object_Read
   if(p_Motor_Object_Ready_Flag != NULL)
   {
     ROTARY_ENCODER.Is_Motor_Object_Ready = p_Motor_Object_Ready_Flag;
+  }
+  else
+  {
+    HAL_UART_Transmit(Debug_UART, "Motor_Object is NULL!\r\n", sizeof("Motor_Object is NULL!\r\n"), 10);
   }
 }

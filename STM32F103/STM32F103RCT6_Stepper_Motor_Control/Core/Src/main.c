@@ -26,6 +26,7 @@
 // #include "APPLICATION_SETTINGS.h"
 // #include "LEDs/main_app_led.h"
 #include "LCD_PCF8574/i2c-lcd.h"
+#include "QUEUEs/queue_type.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

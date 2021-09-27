@@ -1247,6 +1247,9 @@
                 <name>$PROJ_DIR$\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_i2c.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</name>
             </file>
             <file>
@@ -1260,6 +1263,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
             </file>
         </group>
     </group>
@@ -1279,6 +1285,9 @@
         </group>
         <group>
             <name>QUEUEs</name>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\QUEUEs\queue_type.h</name>
+            </file>
         </group>
         <group>
             <name>ROTARY_ENCODER</name>

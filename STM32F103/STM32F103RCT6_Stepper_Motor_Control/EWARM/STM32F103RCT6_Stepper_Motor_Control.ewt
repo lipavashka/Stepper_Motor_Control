@@ -1291,10 +1291,28 @@
         </group>
         <group>
             <name>ROTARY_ENCODER</name>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_execute.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_execute.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_state_mashine.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_state_mashine.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MAIN_APP\ROTARY_ENCODER\rotary_encoder_type.h</name>
+            </file>
         </group>
         <group>
             <name>STEPPER_MOTOR</name>
         </group>
+        <file>
+            <name>$PROJ_DIR$\..\MAIN_APP\APPLICATION_SETTINGS.h</name>
+        </file>
     </group>
     <group>
         <name>Middlewares</name>

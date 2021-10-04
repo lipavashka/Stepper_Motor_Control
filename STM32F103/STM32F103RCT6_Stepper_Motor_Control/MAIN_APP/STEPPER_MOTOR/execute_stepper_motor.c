@@ -10,19 +10,19 @@ extern TIM_HandleTypeDef htim3;
 
 void Enable_Motor_0(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
 }
 void Disable_Motor_0(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 }
 void Enable_Motor_1(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_SET);
 }
 void Disable_Motor_1(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 void Set_Motor_Direction_0(QUEUE_MOTOR_DIRECTION_t direction)
 {
@@ -30,12 +30,12 @@ void Set_Motor_Direction_0(QUEUE_MOTOR_DIRECTION_t direction)
   {
     case(QUEUE_MOTOR_DIRECTION_Forward):
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
       break;
     }
     case(QUEUE_MOTOR_DIRECTION_Reverse):
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
       break;
     }
     default:
@@ -52,12 +52,12 @@ void Set_Motor_Direction_1(QUEUE_MOTOR_DIRECTION_t direction)
   {
     case(QUEUE_MOTOR_DIRECTION_Forward):
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
       break;
     }
     case(QUEUE_MOTOR_DIRECTION_Reverse):
     {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
       break;
     }
     default:
@@ -97,15 +97,14 @@ void SET_PWM_1(uint16_t pwm_value)
 {  
   htim3.Instance->CCR2 = pwm_value;  
 }
-void setPeriod(uint16_t period_value)
-{  
-  // TIMx->ARR
-  htim3.Instance->ARR = period_value;  
-}
 void setPeriod_Motor_0(uint16_t period_value)
 {  
   // TIMx->ARR
   htim2.Instance->ARR = period_value;  
+}
+void setPeriod_Motor_1(uint16_t period_value)
+{  
+  htim3.Instance->ARR = period_value;  
 }
 void CopyData_from_Queue(QUEUE_MOTOR_t *out, const QUEUE_MOTOR_t *in)
 {
@@ -169,6 +168,7 @@ MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
   MOTOR_STATUS_t execute_status = MOTOR_STATUS_PARSE_DATA_ERROR;
 
   taskENTER_CRITICAL();
+
   if(motor_control->MOTOR_Queue_RX.Enable_0 == true)
   {
     if(motor_control->MOTOR_Queue_RX.Period_0 <= 59900)
@@ -187,6 +187,26 @@ MOTOR_STATUS_t Execute_Motor_Parse_Data(STEPPER_MOTOR_CONTROL_t *motor_control)
   {
     Disable_Motor_0();
   }
+  
+  if(motor_control->MOTOR_Queue_RX.Enable_1 == true)
+  {
+    if(motor_control->MOTOR_Queue_RX.Period_1 <= 59900)
+    {
+      setPeriod_Motor_1(motor_control->MOTOR_Queue_RX.Period_1);
+      SET_PWM_1(motor_control->MOTOR_Queue_RX.DutyCycle_1);
+      Set_Motor_Direction_1(motor_control->MOTOR_Queue_RX.Direction_1);
+      Enable_Motor_1();
+    }
+    else
+    {
+      Disable_Motor_1();
+    }
+  }
+  else
+  {
+    Disable_Motor_1();
+  }
+
   taskEXIT_CRITICAL();
   
   

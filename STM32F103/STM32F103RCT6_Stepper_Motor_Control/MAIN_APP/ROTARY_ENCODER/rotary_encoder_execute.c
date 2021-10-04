@@ -77,7 +77,7 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Parse_Data(ROTARY_ENCODER_t *rotar
   
   rotary_encoder->CONVERTER.number_of_Pulses = (rotary_encoder->CONVERTER.number_of_Pulses / 2);
   
-  if((rotary_encoder->CONVERTER.number_of_Pulses != 0) && (rotary_encoder->CONVERTER.number_of_Pulses > 5))
+  if((rotary_encoder->CONVERTER.number_of_Pulses != 0) && (rotary_encoder->CONVERTER.number_of_Pulses > 0))
   {
 //    if(rotary_encoder->CONVERTER.number_of_Pulses > 50)
 //    {
@@ -98,9 +98,14 @@ ROTARY_ENCODER_STATUS_t Execute_RotaryEncoder_Parse_Data(ROTARY_ENCODER_t *rotar
     }
     rotary_encoder->CONVERTER.k = (((rotary_encoder->CONVERTER.Cm / rotary_encoder->CONVERTER.Ce) * rotary_encoder->CONVERTER.k_Set) * (float64_t)rotary_encoder->CONVERTER.Hols);
     float64_t _timer_Period_SET = ( ( (float64_t)((float64_t)os_delay_rotary_encoder/*mSec*/ / (float64_t)rotary_encoder->CONVERTER.number_of_Pulses) * rotary_encoder->CONVERTER.k_Timer) * rotary_encoder->CONVERTER.k );
+    _timer_Period_SET = (_timer_Period_SET * (float64_t)2.5);
     rotary_encoder->CONVERTER.Timer_Period_SET = (uint16_t)_timer_Period_SET;
+    
     rotary_encoder->queue_motor_set_parametrs.Period_0 = rotary_encoder->CONVERTER.Timer_Period_SET;
     rotary_encoder->queue_motor_set_parametrs.Enable_0 = true;
+    
+    rotary_encoder->queue_motor_set_parametrs.Period_1 = rotary_encoder->CONVERTER.Timer_Period_SET;
+    rotary_encoder->queue_motor_set_parametrs.Enable_1 = true;
   }
   else
   {

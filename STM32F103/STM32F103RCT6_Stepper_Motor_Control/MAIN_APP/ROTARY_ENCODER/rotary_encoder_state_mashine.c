@@ -37,7 +37,7 @@ ROTARY_ENCODER_t ROTARY_ENCODER =
     (_2PI * R_motor), // - for example    // uint32_t Cm_SET;  
     R_encoder,                                  // const uint32_t Re;
     (_2PI * R_encoder),                   // const double Ce;  
-    10000,                                       // const uint32_t k_Timer;
+    10000/*10000*/,                                       // const uint32_t k_Timer;
     0,                                          // uint32_t k__Set;
     0,                                          // uint32_t k;  
     0,                                          // uint32_t number_of_Pulses;

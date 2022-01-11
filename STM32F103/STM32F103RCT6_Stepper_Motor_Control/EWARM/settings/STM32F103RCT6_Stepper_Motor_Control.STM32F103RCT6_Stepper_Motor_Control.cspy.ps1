@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" --backend -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" --backend -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" --debug_file=$debugfile --backend -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" --debug_file=$debugfile --backend -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
 }

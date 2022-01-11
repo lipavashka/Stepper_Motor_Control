@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" --backend -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" --backend -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" "--debug_file=%~1" --backend -f "G:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.general.xcl" "--debug_file=%~1" --backend -f "D:\GitHub\Stepper_Motor_Control\STM32F103\STM32F103RCT6_Stepper_Motor_Control\EWARM\settings\STM32F103RCT6_Stepper_Motor_Control.STM32F103RCT6_Stepper_Motor_Control.driver.xcl" 
 
 @echo off 
 :end
